@@ -7,6 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="portal.js"></script>
     <style>
         [x-cloak] { display: none !important; }
@@ -21,7 +23,9 @@
     <!-- Sidebar (no-print) -->
     <aside class="w-64 bg-black text-gray-300 flex flex-col fixed h-full z-40 no-print">
         <div class="p-6 border-b border-gray-800">
-            <h1 class="text-xl font-bold">Fleet Pro</h1>
+            <h1 class="text-xl font-bold flex items-center text-white">
+                <span class="text-blue-500 mr-2">NNM</span> Fleet Pro
+            </h1>
         </div>
         <nav class="flex-1 p-4 space-y-2">
             <a href="index.html" class="flex items-center p-3 rounded-lg hover:bg-gray-800 transition">
@@ -64,12 +68,20 @@
                     <h2 class="text-3xl font-black text-gray-900">Manage Sites</h2>
                     <p class="text-gray-500">Select a site to view its machine inventory</p>
                 </div>
-                <button @click="saveData()" :disabled="!isDirty" :class="isDirty ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-400'" class="px-6 py-2 rounded-xl font-bold shadow transition">
-                    Sync Changes
-                </button>
+                <div class="flex items-center space-x-3">
+                    <button @click="toggleMap()" class="bg-white border-2 px-4 py-2 rounded-xl font-bold hover:bg-gray-50 transition shadow-sm">
+                        <span x-text="showMap ? 'Show List' : 'Show Fleet Map'"></span>
+                    </button>
+                    <button @click="saveData()" :disabled="!isDirty" :class="isDirty ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-400'" class="px-6 py-2 rounded-xl font-bold shadow transition">
+                        Sync Changes
+                    </button>
+                </div>
             </header>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Map View -->
+            <div x-show="showMap" x-cloak class="mb-10 bg-white rounded-[40px] shadow-sm border border-gray-100 overflow-hidden h-[500px]" id="fleetMap"></div>
+
+            <div x-show="!showMap" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <template x-for="site in data.laundromats" :key="site.id">
                     <div class="bg-white rounded-3xl shadow-sm border-2 border-transparent hover:border-blue-500 transition cursor-pointer group" @click="openSite(site)">
                         <div class="p-6">
@@ -287,12 +299,58 @@
                 isPrinting: false,
                 printingSite: null,
                 selectedIds: [],
+                showMap: false,
+                map: null,
+                markers: [],
                 logModal: { show: false, machine: null, action: '', notes: '' },
                 batchLogModal: { show: false, action: '', notes: '' },
                 batchScheduleModal: { show: false, task: '', date: '' },
 
                 async init() {
                     await this.initShared();
+                },
+
+                toggleMap() {
+                    this.showMap = !this.showMap;
+                    if (this.showMap) {
+                        this.$nextTick(() => this.renderMap());
+                    }
+                },
+
+                renderMap() {
+                    if (this.map) return;
+                    this.map = L.map('fleetMap').setView([0, 0], 2);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
+
+                    const group = L.featureGroup();
+                    this.data.laundromats.forEach(site => {
+                        const coords = this.getCoordinates(site.location);
+                        if (coords) {
+                            const siteMachines = this.getMachinesForSite(site.id);
+                            const hasFault = siteMachines.any(m => m.status === 'DOWN');
+                            const color = hasFault ? '#B71C1C' : '#1976D2';
+
+                            const marker = L.circleMarker(coords, {
+                                radius: 8,
+                                fillOpacity: 0.8,
+                                color: 'white',
+                                weight: 2,
+                                fillColor: color
+                            }).addTo(this.map);
+
+                            marker.bindPopup(`<b>${site.name}</b><br>${siteMachines.length} units<br><a href="#" onclick="window.openSiteFromMap(${site.id})">Open Site</a>`);
+                            group.addLayer(marker);
+                        }
+                    });
+
+                    if (group.getLayers().length > 0) {
+                        this.map.fitBounds(group.getBounds(), { padding: [50, 50] });
+                    }
+
+                    window.openSiteFromMap = (id) => {
+                        const site = this.data.laundromats.find(s => s.id === id);
+                        this.openSite(site);
+                    };
                 },
 
                 openSite(site) {
