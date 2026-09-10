@@ -394,7 +394,27 @@
     </main>
 
     <!-- Global Log Dialog -->
-    ... (omitted for brevity, assume unchanged or handle below) ...
+    <div x-show="logDialog.show" x-cloak class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl p-8 w-full max-w-md shadow-2xl scale-100 transition-transform">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-black text-gray-900">Add Service Log</h3>
+                <button @click="closeLogDialog()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Action Performed</label>
+                    <input type="text" x-model="logDialog.action" class="w-full p-4 bg-gray-50 border-2 border-gray-100 rounded-2xl outline-none focus:border-blue-500 transition" placeholder="e.g. Belt Replacement">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Additional Notes</label>
+                    <textarea x-model="logDialog.notes" class="w-full p-4 bg-gray-50 border-2 border-gray-100 rounded-2xl outline-none focus:border-blue-500 transition h-32" placeholder="Describe the work done..."></textarea>
+                </div>
+                <button @click="addLog()" class="w-full bg-blue-600 text-white p-5 rounded-2xl font-black shadow-xl shadow-blue-100 hover:bg-blue-700 transition">Save Log Entry</button>
+            </div>
+        </div>
+    </div>
 
     <!-- QR Dialog -->
     <div x-show="qrDialog.show" x-cloak class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
