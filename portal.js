@@ -87,8 +87,12 @@ function getPortalApp() {
             }
         },
 
-        getReportUrl(path) {
-            return `https://api.github.com/repos/${this.user.login}/${REPO_NAME}/contents/${path}?access_token=${this.token}`;
+        getReportUrl(report) {
+            if (report.name.endsWith('.html')) {
+                // Use GitHub Pages link if possible, otherwise raw with proxy
+                return `https://${this.user.login}.github.io/${REPO_NAME}/reports/${report.name}`;
+            }
+            return report.download_url;
         },
 
         async saveData() {
