@@ -12,6 +12,8 @@ function getPortalApp() {
         isDirty: false,
         sha: '',
         deviceName: localStorage.getItem('device_name') || 'Office Portal',
+        searchQuery: '',
+        searchResults: [],
 
         async initShared() {
             if (this.token) {
@@ -21,6 +23,63 @@ function getPortalApp() {
                     this.logout();
                 }
             }
+        },
+
+        // Global Search
+        performGlobalSearch() {
+            if (!this.searchQuery) {
+                this.searchResults = [];
+                return;
+            }
+            const q = this.searchQuery.toLowerCase();
+            this.searchResults = this.data.machines.filter(m =>
+                (m.nickname && m.nickname.toLowerCase().includes(q)) ||
+                (m.serialNumber && m.serialNumber.toLowerCase().includes(q)) ||
+                (m.model && m.model.toLowerCase().includes(q)) ||
+                (m.brand && m.brand.toLowerCase().includes(q))
+            ).map(m => ({
+                ...m,
+                siteName: this.data.laundromats.find(s => s.id === m.laundromatId)?.name || 'Unknown'
+            }));
+        },
+
+        // CSV Export
+        downloadCsv(type) {
+            let csv = '';
+            let filename = '';
+
+            if (type === 'inventory') {
+                csv = 'Name,Part Number,Stock,Threshold\n';
+                this.data.spareParts.forEach(p => {
+                    csv += `"${p.name}","${p.partNumber}",${p.stockQuantity},${p.minimumThreshold}\n`;
+                });
+                filename = 'inventory_export.csv';
+            } else if (type === 'logs') {
+                csv = 'Date,Machine,Site,Action,Notes\n';
+                this.data.logs.forEach(l => {
+                    const m = this.getMachineById(l.machineId);
+                    const site = this.data.laundromats.find(s => s.id === m?.laundromatId);
+                    const date = this.formatDate(l.timestamp);
+                    csv += `"${date}","${m?.nickname || m?.model}","${site?.name}","${l.action}","${l.notes.replace(/\n/g, ' ')}"\n`;
+                });
+                filename = 'service_history.csv';
+            }
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        },
+
+        // Map Helpers
+        getCoordinates(location) {
+            const regex = /^(-?\d+(\.\d+)?),\s*(-?\d+(\.\d+)?)$/;
+            const match = location.match(regex);
+            if (match) return [parseFloat(match[1]), parseFloat(match[3])];
+            return null;
         },
 
         async login() {
@@ -111,6 +170,28 @@ function getPortalApp() {
                     this.isDirty = false;
                     alert('Synced to Cloud!');
                 } else alert('Save conflict. Refresh first.');
+            } catch (e) { alert('Error: ' + e.message); }
+            this.loading = false;
+        },
+
+        async deleteReport(report) {
+            if (!confirm(`Are you sure you want to delete ${report.name}?`)) return;
+            this.loading = true;
+            try {
+                const res = await fetch(`https://api.github.com/repos/${this.user.login}/${REPO_NAME}/contents/${report.path}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `token ${this.token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: `Deleted report: ${report.name}`,
+                        sha: report.sha
+                    })
+                });
+                if (res.ok) {
+                    alert('Report deleted.');
+                    await this.fetchReports();
+                } else {
+                    alert('Failed to delete report.');
+                }
             } catch (e) { alert('Error: ' + e.message); }
             this.loading = false;
         },
