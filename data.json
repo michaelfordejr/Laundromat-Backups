@@ -1,4 +1,15 @@
 {
+  "documents": [
+    {
+      "id": 1,
+      "isDownloaded": false,
+      "language": "English",
+      "localPath": "Manuals/Site_2/Machine_SCN030LC2_13/PM Guide _F232178EN.pdf",
+      "machineId": 13,
+      "remoteUrl": "http://docs.alliancelaundry.com/tech_pdf/PMGuides/F232178en.pdf",
+      "title": "PM Guide #F232178EN"
+    }
+  ],
   "laundromats": [
     {
       "colorRes": 17170445,
@@ -963,6 +974,411 @@
       "size": "40 lb",
       "status": "DOWN",
       "type": "WASHER"
+    }
+  ],
+  "partUsages": [
+    {
+      "id": 1,
+      "logId": 2,
+      "partId": 1,
+      "quantityUsed": 1
+    },
+    {
+      "id": 3,
+      "logId": 4,
+      "partId": 3,
+      "quantityUsed": 1
+    },
+    {
+      "id": 4,
+      "logId": 4,
+      "partId": 2,
+      "quantityUsed": 1
+    }
+  ],
+  "scheduledMaintenance": [
+    {
+      "id": 2,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 11,
+      "recurrenceIntervalDays": 30,
+      "scheduledTimestamp": 1789392945118,
+      "taskName": "Water Inlet Valve Check"
+    },
+    {
+      "id": 3,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 11,
+      "recurrenceIntervalDays": 90,
+      "scheduledTimestamp": 1791380145118,
+      "taskName": "Door Seal Inspection"
+    },
+    {
+      "id": 5,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 19,
+      "recurrenceIntervalDays": 30,
+      "scheduledTimestamp": 1789400550293,
+      "taskName": "Water Inlet Valve Check"
+    },
+    {
+      "id": 6,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 19,
+      "recurrenceIntervalDays": 90,
+      "scheduledTimestamp": 1791387750293,
+      "taskName": "Door Seal Inspection"
+    },
+    {
+      "id": 7,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 30,
+      "recurrenceIntervalDays": 30,
+      "scheduledTimestamp": 1789405390179,
+      "taskName": "Water Inlet Valve Check"
+    },
+    {
+      "id": 8,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 30,
+      "recurrenceIntervalDays": 90,
+      "scheduledTimestamp": 1791392590179,
+      "taskName": "Door Seal Inspection"
+    },
+    {
+      "id": 9,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 31,
+      "recurrenceIntervalDays": 30,
+      "scheduledTimestamp": 1789405451778,
+      "taskName": "Water Inlet Valve Check"
+    },
+    {
+      "id": 10,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 31,
+      "recurrenceIntervalDays": 90,
+      "scheduledTimestamp": 1791392651778,
+      "taskName": "Door Seal Inspection"
+    },
+    {
+      "id": 11,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 32,
+      "recurrenceIntervalDays": 30,
+      "scheduledTimestamp": 1789405496244,
+      "taskName": "Water Inlet Valve Check"
+    },
+    {
+      "id": 12,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 32,
+      "recurrenceIntervalDays": 90,
+      "scheduledTimestamp": 1791392696244,
+      "taskName": "Door Seal Inspection"
+    },
+    {
+      "id": 13,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 33,
+      "recurrenceIntervalDays": 30,
+      "scheduledTimestamp": 1789405632410,
+      "taskName": "Water Inlet Valve Check"
+    },
+    {
+      "id": 14,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 33,
+      "recurrenceIntervalDays": 90,
+      "scheduledTimestamp": 1791392832410,
+      "taskName": "Door Seal Inspection"
+    },
+    {
+      "id": 15,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 34,
+      "recurrenceIntervalDays": 30,
+      "scheduledTimestamp": 1789405728513,
+      "taskName": "Water Inlet Valve Check"
+    },
+    {
+      "id": 16,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 34,
+      "recurrenceIntervalDays": 90,
+      "scheduledTimestamp": 1791392928513,
+      "taskName": "Door Seal Inspection"
+    },
+    {
+      "id": 17,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 35,
+      "recurrenceIntervalDays": 30,
+      "scheduledTimestamp": 1789405802459,
+      "taskName": "Water Inlet Valve Check"
+    },
+    {
+      "id": 18,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 35,
+      "recurrenceIntervalDays": 90,
+      "scheduledTimestamp": 1791393002459,
+      "taskName": "Door Seal Inspection"
+    },
+    {
+      "id": 19,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 37,
+      "recurrenceIntervalDays": 30,
+      "scheduledTimestamp": 1789406379604,
+      "taskName": "Water Inlet Valve Check"
+    },
+    {
+      "id": 20,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 37,
+      "recurrenceIntervalDays": 90,
+      "scheduledTimestamp": 1791393579604,
+      "taskName": "Door Seal Inspection"
+    },
+    {
+      "id": 21,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 38,
+      "recurrenceIntervalDays": 30,
+      "scheduledTimestamp": 1789406617094,
+      "taskName": "Water Inlet Valve Check"
+    },
+    {
+      "id": 22,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 38,
+      "recurrenceIntervalDays": 90,
+      "scheduledTimestamp": 1791393817094,
+      "taskName": "Door Seal Inspection"
+    },
+    {
+      "id": 23,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 39,
+      "recurrenceIntervalDays": 30,
+      "scheduledTimestamp": 1789406666396,
+      "taskName": "Water Inlet Valve Check"
+    },
+    {
+      "id": 24,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 39,
+      "recurrenceIntervalDays": 90,
+      "scheduledTimestamp": 1791393866396,
+      "taskName": "Door Seal Inspection"
+    },
+    {
+      "id": 25,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 40,
+      "recurrenceIntervalDays": 30,
+      "scheduledTimestamp": 1789406728956,
+      "taskName": "Water Inlet Valve Check"
+    },
+    {
+      "id": 26,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 40,
+      "recurrenceIntervalDays": 90,
+      "scheduledTimestamp": 1791393928956,
+      "taskName": "Door Seal Inspection"
+    },
+    {
+      "id": 27,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 41,
+      "recurrenceIntervalDays": 30,
+      "scheduledTimestamp": 1789406776082,
+      "taskName": "Water Inlet Valve Check"
+    },
+    {
+      "id": 28,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 41,
+      "recurrenceIntervalDays": 90,
+      "scheduledTimestamp": 1791393976082,
+      "taskName": "Door Seal Inspection"
+    },
+    {
+      "id": 29,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 42,
+      "recurrenceIntervalDays": 30,
+      "scheduledTimestamp": 1789406906870,
+      "taskName": "Water Inlet Valve Check"
+    },
+    {
+      "id": 30,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 42,
+      "recurrenceIntervalDays": 90,
+      "scheduledTimestamp": 1791394106870,
+      "taskName": "Door Seal Inspection"
+    },
+    {
+      "id": 31,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 43,
+      "recurrenceIntervalDays": 30,
+      "scheduledTimestamp": 1789406950797,
+      "taskName": "Water Inlet Valve Check"
+    },
+    {
+      "id": 32,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 43,
+      "recurrenceIntervalDays": 90,
+      "scheduledTimestamp": 1791394150797,
+      "taskName": "Door Seal Inspection"
+    },
+    {
+      "id": 33,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 54,
+      "recurrenceIntervalDays": 30,
+      "scheduledTimestamp": 1789566333278,
+      "taskName": "Water Inlet Valve Check"
+    },
+    {
+      "id": 34,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 54,
+      "recurrenceIntervalDays": 90,
+      "scheduledTimestamp": 1791553533278,
+      "taskName": "Door Seal Inspection"
+    },
+    {
+      "id": 35,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 60,
+      "recurrenceIntervalDays": 30,
+      "scheduledTimestamp": 1789566772043,
+      "taskName": "Water Inlet Valve Check"
+    },
+    {
+      "id": 36,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 60,
+      "recurrenceIntervalDays": 90,
+      "scheduledTimestamp": 1791553972043,
+      "taskName": "Door Seal Inspection"
+    },
+    {
+      "id": 37,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 61,
+      "recurrenceIntervalDays": 30,
+      "scheduledTimestamp": 1789566866816,
+      "taskName": "Water Inlet Valve Check"
+    },
+    {
+      "id": 38,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 61,
+      "recurrenceIntervalDays": 90,
+      "scheduledTimestamp": 1791554066816,
+      "taskName": "Door Seal Inspection"
+    },
+    {
+      "id": 39,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 62,
+      "recurrenceIntervalDays": 30,
+      "scheduledTimestamp": 1789566929155,
+      "taskName": "Water Inlet Valve Check"
+    },
+    {
+      "id": 40,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 62,
+      "recurrenceIntervalDays": 90,
+      "scheduledTimestamp": 1791554129155,
+      "taskName": "Door Seal Inspection"
+    },
+    {
+      "id": 41,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 63,
+      "recurrenceIntervalDays": 30,
+      "scheduledTimestamp": 1789567057590,
+      "taskName": "Water Inlet Valve Check"
+    },
+    {
+      "id": 42,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 63,
+      "recurrenceIntervalDays": 90,
+      "scheduledTimestamp": 1791554257590,
+      "taskName": "Door Seal Inspection"
+    }
+  ],
+  "spareParts": [
+    {
+      "id": 3,
+      "minimumThreshold": 0,
+      "name": "SINPAC Switch",
+      "partNumber": "340002",
+      "stockQuantity": 1
+    },
+    {
+      "id": 2,
+      "minimumThreshold": 0,
+      "name": "drive motor",
+      "partNumber": "",
+      "stockQuantity": 1
+    },
+    {
+      "id": 1,
+      "minimumThreshold": 1,
+      "name": "fuse",
+      "partNumber": "123",
+      "stockQuantity": 49
     }
   ]
 }
