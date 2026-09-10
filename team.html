@@ -15,7 +15,9 @@
     <!-- Sidebar -->
     <aside class="w-64 bg-black text-gray-300 flex flex-col fixed h-full z-40">
         <div class="p-6 border-b border-gray-800">
-            <h1 class="text-xl font-bold">Fleet Pro</h1>
+            <h1 class="text-xl font-bold flex items-center text-white">
+                <span class="text-blue-500 mr-2">NNM</span> Fleet Pro
+            </h1>
         </div>
         <nav class="flex-1 p-4 space-y-2">
             <a href="index.html" class="flex items-center p-3 rounded-lg hover:bg-gray-800 transition">
@@ -48,6 +50,27 @@
             <h2 class="text-3xl font-black text-gray-900 mb-10">Team Management</h2>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Dispatch Work Order -->
+                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-10">
+                    <h3 class="text-2xl font-black text-gray-900 mb-6">Dispatch Work Order</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Target Machine</label>
+                            <select x-model="dispatch.machineId" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold">
+                                <option value="">Select Unit...</option>
+                                <template x-for="m in data.machines" :key="m.id">
+                                    <option :value="m.id" x-text="(m.nickname || m.model) + ' (' + getSiteName(m.laundromatId) + ')'"></option>
+                                </template>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Task Details</label>
+                            <input type="text" x-model="dispatch.task" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold" placeholder="e.g. Check water leak">
+                        </div>
+                        <button @click="dispatchWorkOrder()" class="w-full bg-blue-600 text-white p-5 rounded-2xl font-black shadow-lg hover:bg-blue-700 transition active:scale-95">Dispatch to Team</button>
+                    </div>
+                </div>
+
                 <!-- Invite -->
                 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-10 flex flex-col items-center text-center">
                     <h3 class="text-2xl font-black text-gray-900 mb-2">Onboard Technician</h3>
@@ -70,22 +93,22 @@
                     <button @click="copyJoinUrl()" class="w-full bg-blue-600 text-white p-4 rounded-xl font-black shadow-lg hover:bg-blue-700 transition">Copy Join Link</button>
                     <button @click="saveData()" x-show="isDirty" class="w-full mt-2 bg-green-600 text-white p-4 rounded-xl font-black shadow-lg hover:bg-green-700 transition">Save Password Update</button>
                 </div>
+            </div>
 
-                <!-- Active Devices -->
-                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="p-6 border-b bg-gray-50 font-black text-gray-800">Active Technicians</div>
-                    <div class="divide-y max-h-[500px] overflow-y-auto">
-                        <template x-for="tech in contributors" :key="tech.id">
-                            <div class="p-4 hover:bg-gray-50 flex items-center">
-                                <div class="w-10 h-10 rounded-full bg-gray-900 text-white flex items-center justify-center font-bold mr-4" x-text="tech.name[0]"></div>
-                                <div class="flex-1">
-                                    <p class="font-bold text-gray-900" x-text="tech.name"></p>
-                                    <p class="text-xs text-gray-400" x-text="'Last active: ' + formatDate(tech.date)"></p>
-                                </div>
-                                <div class="bg-green-100 text-green-700 px-2 py-1 rounded text-[10px] font-black uppercase">Technician</div>
+            <!-- Active Devices -->
+            <div class="mt-10 bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden max-w-2xl">
+                <div class="p-6 border-b bg-gray-50 font-black text-gray-800">Active Technicians</div>
+                <div class="divide-y max-h-[500px] overflow-y-auto">
+                    <template x-for="tech in contributors" :key="tech.id">
+                        <div class="p-4 hover:bg-gray-50 flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-gray-900 text-white flex items-center justify-center font-bold mr-4" x-text="tech.name[0]"></div>
+                            <div class="flex-1">
+                                <p class="font-bold text-gray-900" x-text="tech.name"></p>
+                                <p class="text-xs text-gray-400" x-text="'Last active: ' + formatDate(tech.date)"></p>
                             </div>
-                        </template>
-                    </div>
+                            <div class="bg-green-100 text-green-700 px-2 py-1 rounded text-[10px] font-black uppercase">Technician</div>
+                        </div>
+                    </template>
                 </div>
             </div>
         </div>
@@ -97,10 +120,29 @@
             return {
                 ...shared,
                 contributors: [],
+                dispatch: { machineId: '', task: '' },
                 async init() {
                     await this.initShared();
                     this.renderInviteQr();
                     this.fetchContributors();
+                },
+                getSiteName(id) {
+                    return this.data.laundromats.find(s => s.id === id)?.name || 'Unknown';
+                },
+                dispatchWorkOrder() {
+                    if (!this.dispatch.machineId || !this.dispatch.task) return alert('Select a machine and enter task.');
+                    this.data.scheduledMaintenance.push({
+                        id: Date.now(),
+                        machineId: parseInt(this.dispatch.machineId),
+                        taskName: '[PORTAL] ' + this.dispatch.task,
+                        scheduledTimestamp: Date.now(),
+                        isRecurring: false,
+                        recurrenceIntervalDays: 0,
+                        isCompleted: false
+                    });
+                    this.isDirty = true;
+                    this.dispatch.task = '';
+                    alert('Work order dispatched! Tap Save to sync.');
                 },
                 renderInviteQr() {
                     const data = `laundromatma://join?owner=${this.user.login}&token=${this.token}`;
