@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Laundromat Fleet Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="portal.js"></script>
+    <style>[x-cloak] { display: none !important; }</style>
+</head>
+<body class="bg-gray-100 min-h-screen flex" x-data="analyticsApp()" x-init="init()">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-black text-gray-300 flex flex-col fixed h-full z-40">
+        <div class="p-6 border-b border-gray-800">
+            <h1 class="text-xl font-bold">Fleet Pro</h1>
+        </div>
+        <nav class="flex-1 p-4 space-y-2">
+            <a href="index.html" class="flex items-center p-3 rounded-lg hover:bg-gray-800 transition">
+                Dashboard
+            </a>
+            <a href="sites.html" class="flex items-center p-3 rounded-lg hover:bg-gray-800 transition">
+                Sites
+            </a>
+            <a href="inventory.html" class="flex items-center p-3 rounded-lg hover:bg-gray-800 transition">
+                Inventory
+            </a>
+            <a href="analytics.html" class="flex items-center p-3 rounded-lg bg-blue-600 text-white">
+                Analytics
+            </a>
+            <a href="team.html" class="flex items-center p-3 rounded-lg hover:bg-gray-800 transition">
+                Team Hub
+            </a>
+        </nav>
+        <div class="p-4 border-t border-gray-800">
+            <button @click="logout()" class="w-full bg-red-900 p-2 rounded text-sm transition">Logout</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 ml-64 p-8">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-black text-gray-900 mb-10">Fleet Analytics</h2>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                    <h3 class="font-bold text-gray-400 uppercase text-xs mb-6">Uptime Distribution</h3>
+                    <canvas id="uptimeChart"></canvas>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                    <h3 class="font-bold text-gray-400 uppercase text-xs mb-6">Faults by Model</h3>
+                    <canvas id="faultChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function analyticsApp() {
+            const shared = getPortalApp();
+            return {
+                ...shared,
+                async init() {
+                    await this.initShared();
+                    this.renderCharts();
+                },
+                renderCharts() {
+                    const stats = this.data.machines.reduce((acc, m) => {
+                        acc[m.status] = (acc[m.status] || 0) + 1;
+                        return acc;
+                    }, {});
+
+                    new Chart(document.getElementById('uptimeChart'), {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Working', 'Maintenance', 'Fault'],
+                            datasets: [{
+                                data: [stats.OPERATIONAL||0, stats.SERVICE_REQUIRED||0, stats.DOWN||0],
+                                backgroundColor: ['#2E7D32', '#EF6C00', '#B71C1C']
+                            }]
+                        }
+                    });
+
+                    const models = this.data.machines.reduce((acc, m) => {
+                        if (m.status === 'DOWN') acc[m.model] = (acc[m.model] || 0) + 1;
+                        return acc;
+                    }, {});
+                    const sorted = Object.entries(models).sort((a,b) => b[1] - a[1]).slice(0, 5);
+
+                    new Chart(document.getElementById('faultChart'), {
+                        type: 'bar',
+                        data: {
+                            labels: sorted.map(s => s[0]),
+                            datasets: [{
+                                label: 'Down Units',
+                                data: sorted.map(s => s[1]),
+                                backgroundColor: '#B71C1C'
+                            }]
+                        },
+                        options: { indexAxis: 'y' }
+                    });
+                }
+            }
+        }
+    </script>
+</body>
+</html>
