@@ -22,6 +22,12 @@
       "id": 3,
       "location": "Lat: 21.796658030001442, Lng: -72.27160591632128",
       "name": "Pablo\u0027s BlueHills"
+    },
+    {
+      "colorRes": 17170445,
+      "id": 4,
+      "location": "123456",
+      "name": "test"
     }
   ],
   "logs": [
