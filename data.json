@@ -4,13 +4,13 @@
       "colorRes": 17170445,
       "id": 2,
       "location": "Lat: 21.780729464502443, Lng: -72.20209646970034",
-      "name": "Pablo\u0027s Highway"
+      "name": "Pablo's Highway"
     },
     {
       "colorRes": 17170445,
       "id": 3,
       "location": "Lat: 21.796658030001442, Lng: -72.27160591632128",
-      "name": "Pablo\u0027s BlueHills"
+      "name": "Pablo's BlueHills"
     }
   ],
   "logs": [
@@ -111,12 +111,47 @@
       "machineId": 2,
       "notes": "Scheduled maintenance completed.",
       "timestamp": 1788974413042
+    },
+    {
+      "id": 1789050262860,
+      "machineId": 37,
+      "timestamp": 1789050262860,
+      "action": "Cleaning",
+      "notes": "Soap dispenser and door seal cleaned"
+    },
+    {
+      "id": 1789050280445,
+      "machineId": 38,
+      "timestamp": 1789050280445,
+      "action": "Cleaning",
+      "notes": "Soap dispenser and door seal cleaned"
+    },
+    {
+      "id": 1789050307510,
+      "machineId": 39,
+      "timestamp": 1789050307510,
+      "action": "Cleaning ",
+      "notes": "Soap dispenser and door seal cleaned"
+    },
+    {
+      "id": 1789050328147,
+      "machineId": 40,
+      "timestamp": 1789050328147,
+      "action": "Cleaning ",
+      "notes": "Soap dispenser and door seal cleaned"
+    },
+    {
+      "id": 1789050340517,
+      "machineId": 41,
+      "timestamp": 1789050340517,
+      "action": "Cleaning ",
+      "notes": "Soap dispenser and door seal cleaned"
     }
   ],
   "machines": [
     {
       "brand": "Speed Queen",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCN020WCV",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=SCN020WCV",
       "id": 2,
       "lastStatusChangeTimestamp": 1788834941484,
       "laundromatId": 2,
@@ -130,7 +165,7 @@
     },
     {
       "brand": "Speed Queen",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCN020WCV",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=SCN020WCV",
       "id": 3,
       "lastStatusChangeTimestamp": 1788788660218,
       "laundromatId": 2,
@@ -144,7 +179,7 @@
     },
     {
       "brand": "Speed Queen",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCN020WCV",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=SCN020WCV",
       "id": 5,
       "lastStatusChangeTimestamp": 1788787662532,
       "laundromatId": 2,
@@ -158,7 +193,7 @@
     },
     {
       "brand": "Huebsch",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dHC20ACV",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=HC20ACV",
       "id": 6,
       "lastStatusChangeTimestamp": 1788787826895,
       "laundromatId": 2,
@@ -172,7 +207,7 @@
     },
     {
       "brand": "Huebsch",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dHC20ACV",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=HC20ACV",
       "id": 7,
       "lastStatusChangeTimestamp": 1788787875256,
       "laundromatId": 2,
@@ -186,7 +221,7 @@
     },
     {
       "brand": "Huebsch",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dHC20ACV",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=HC20ACV",
       "id": 8,
       "lastStatusChangeTimestamp": 1788787917947,
       "laundromatId": 2,
@@ -200,7 +235,7 @@
     },
     {
       "brand": "Speed Queen",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCN030LC2",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=SCN030LC2",
       "id": 9,
       "lastStatusChangeTimestamp": 1788787971201,
       "laundromatId": 2,
@@ -214,7 +249,7 @@
     },
     {
       "brand": "Speed Queen",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCN030LC2",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=SCN030LC2",
       "id": 10,
       "lastStatusChangeTimestamp": 1788788076661,
       "laundromatId": 2,
@@ -228,7 +263,7 @@
     },
     {
       "brand": "Dexter",
-      "documentationUrl": "https://www.dexter.com/support/technical-information/?model\u003dt-600",
+      "documentationUrl": "https://www.dexter.com/support/technical-information/?model=t-600",
       "id": 11,
       "lastStatusChangeTimestamp": 1788788145080,
       "laundromatId": 2,
@@ -242,7 +277,7 @@
     },
     {
       "brand": "Speed Queen",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCN030LC2",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=SCN030LC2",
       "id": 12,
       "lastStatusChangeTimestamp": 1788788244040,
       "laundromatId": 2,
@@ -256,7 +291,7 @@
     },
     {
       "brand": "Speed Queen",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCN030LC2",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=SCN030LC2",
       "id": 13,
       "lastStatusChangeTimestamp": 1788788453261,
       "laundromatId": 2,
@@ -270,7 +305,7 @@
     },
     {
       "brand": "Huebsch",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dHC30ACV",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=HC30ACV",
       "id": 15,
       "lastStatusChangeTimestamp": 1788974229401,
       "laundromatId": 3,
@@ -284,7 +319,7 @@
     },
     {
       "brand": "Huebsch",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dHC30ACV",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=HC30ACV",
       "id": 16,
       "lastStatusChangeTimestamp": 1788794179302,
       "laundromatId": 3,
@@ -298,7 +333,7 @@
     },
     {
       "brand": "Speed Queen",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCT040NC",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=SCT040NC",
       "id": 17,
       "lastStatusChangeTimestamp": 1788795212653,
       "laundromatId": 2,
@@ -312,7 +347,7 @@
     },
     {
       "brand": "Speed Queen",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCL030GC2",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=SCL030GC2",
       "id": 18,
       "lastStatusChangeTimestamp": 1788795323210,
       "laundromatId": 2,
@@ -326,7 +361,7 @@
     },
     {
       "brand": "Dexter",
-      "documentationUrl": "https://www.dexter.com/support/technical-information/?model\u003dt-400",
+      "documentationUrl": "https://www.dexter.com/support/technical-information/?model=t-400",
       "id": 19,
       "lastStatusChangeTimestamp": 1788795750272,
       "laundromatId": 2,
@@ -340,7 +375,7 @@
     },
     {
       "brand": "Huebsch",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dHC30ACV",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=HC30ACV",
       "id": 20,
       "lastStatusChangeTimestamp": 1788796469514,
       "laundromatId": 3,
@@ -353,7 +388,7 @@
     },
     {
       "brand": "Huebsch",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dHC30ACV",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=HC30ACV",
       "id": 21,
       "lastStatusChangeTimestamp": 1788796506305,
       "laundromatId": 3,
@@ -366,7 +401,7 @@
     },
     {
       "brand": "Speed Queen",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCT040NC",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=SCT040NC",
       "id": 22,
       "lastStatusChangeTimestamp": 1788796588725,
       "laundromatId": 3,
@@ -380,7 +415,7 @@
     },
     {
       "brand": "Speed Queen",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCT040NC",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=SCT040NC",
       "id": 23,
       "lastStatusChangeTimestamp": 1788796660924,
       "laundromatId": 3,
@@ -394,7 +429,7 @@
     },
     {
       "brand": "Speed Queen",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCT040NC",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=SCT040NC",
       "id": 24,
       "lastStatusChangeTimestamp": 1788796685739,
       "laundromatId": 3,
@@ -408,7 +443,7 @@
     },
     {
       "brand": "Huebsch",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dHC20ACV",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=HC20ACV",
       "id": 25,
       "lastStatusChangeTimestamp": 1788796912783,
       "laundromatId": 3,
@@ -422,7 +457,7 @@
     },
     {
       "brand": "Speed Queen",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCN020LCF",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=SCN020LCF",
       "id": 26,
       "lastStatusChangeTimestamp": 1788797028060,
       "laundromatId": 3,
@@ -436,7 +471,7 @@
     },
     {
       "brand": "Speed Queen",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCT020NC",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=SCT020NC",
       "id": 27,
       "lastStatusChangeTimestamp": 1788797077941,
       "laundromatId": 3,
@@ -450,7 +485,7 @@
     },
     {
       "brand": "Speed Queen",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCT020NC",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=SCT020NC",
       "id": 28,
       "lastStatusChangeTimestamp": 1788797127188,
       "laundromatId": 3,
@@ -464,7 +499,7 @@
     },
     {
       "brand": "Speed Queen",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCN020LCF",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=SCN020LCF",
       "id": 29,
       "lastStatusChangeTimestamp": 1788797216025,
       "laundromatId": 3,
@@ -478,7 +513,7 @@
     },
     {
       "brand": "Dexter",
-      "documentationUrl": "https://www.dexter.com/support/technical-information/?model\u003dt-300",
+      "documentationUrl": "https://www.dexter.com/support/technical-information/?model=t-300",
       "id": 30,
       "lastStatusChangeTimestamp": 1788800590147,
       "laundromatId": 3,
@@ -492,7 +527,7 @@
     },
     {
       "brand": "Dexter",
-      "documentationUrl": "https://www.dexter.com/support/technical-information/?model\u003dt-300",
+      "documentationUrl": "https://www.dexter.com/support/technical-information/?model=t-300",
       "id": 31,
       "lastStatusChangeTimestamp": 1788800651749,
       "laundromatId": 3,
@@ -506,7 +541,7 @@
     },
     {
       "brand": "Dexter",
-      "documentationUrl": "https://www.dexter.com/support/technical-information/?model\u003dt-300",
+      "documentationUrl": "https://www.dexter.com/support/technical-information/?model=t-300",
       "id": 32,
       "lastStatusChangeTimestamp": 1788800696184,
       "laundromatId": 3,
@@ -520,7 +555,7 @@
     },
     {
       "brand": "Dexter",
-      "documentationUrl": "https://www.dexter.com/support/technical-information/?model\u003dt-300",
+      "documentationUrl": "https://www.dexter.com/support/technical-information/?model=t-300",
       "id": 33,
       "lastStatusChangeTimestamp": 1788800832351,
       "laundromatId": 3,
@@ -534,7 +569,7 @@
     },
     {
       "brand": "Dexter",
-      "documentationUrl": "https://www.dexter.com/support/technical-information/?model\u003dt-300",
+      "documentationUrl": "https://www.dexter.com/support/technical-information/?model=t-300",
       "id": 34,
       "lastStatusChangeTimestamp": 1788800928487,
       "laundromatId": 3,
@@ -548,7 +583,7 @@
     },
     {
       "brand": "Dexter",
-      "documentationUrl": "https://www.dexter.com/support/technical-information/?model\u003dt-300",
+      "documentationUrl": "https://www.dexter.com/support/technical-information/?model=t-300",
       "id": 35,
       "lastStatusChangeTimestamp": 1788801002435,
       "laundromatId": 3,
@@ -562,7 +597,7 @@
     },
     {
       "brand": "Huebsch",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dHC30ACV",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=HC30ACV",
       "id": 36,
       "lastStatusChangeTimestamp": 1788801084541,
       "laundromatId": 3,
@@ -576,7 +611,7 @@
     },
     {
       "brand": "Dexter",
-      "documentationUrl": "https://www.dexter.com/support/technical-information/?model\u003dt-400-exp",
+      "documentationUrl": "https://www.dexter.com/support/technical-information/?model=t-400-exp",
       "id": 37,
       "lastStatusChangeTimestamp": 1788801579584,
       "laundromatId": 3,
@@ -590,7 +625,7 @@
     },
     {
       "brand": "Dexter",
-      "documentationUrl": "https://www.dexter.com/support/technical-information/?model\u003dt-400-exp",
+      "documentationUrl": "https://www.dexter.com/support/technical-information/?model=t-400-exp",
       "id": 38,
       "lastStatusChangeTimestamp": 1788801817076,
       "laundromatId": 3,
@@ -604,7 +639,7 @@
     },
     {
       "brand": "Dexter",
-      "documentationUrl": "https://www.dexter.com/support/technical-information/?model\u003dt-400-exp",
+      "documentationUrl": "https://www.dexter.com/support/technical-information/?model=t-400-exp",
       "id": 39,
       "lastStatusChangeTimestamp": 1788801866368,
       "laundromatId": 3,
@@ -618,7 +653,7 @@
     },
     {
       "brand": "Dexter",
-      "documentationUrl": "https://www.dexter.com/support/technical-information/?model\u003dt-400-exp",
+      "documentationUrl": "https://www.dexter.com/support/technical-information/?model=t-400-exp",
       "id": 40,
       "lastStatusChangeTimestamp": 1788801928931,
       "laundromatId": 3,
@@ -632,7 +667,7 @@
     },
     {
       "brand": "Dexter",
-      "documentationUrl": "https://www.dexter.com/support/technical-information/?model\u003dt-400",
+      "documentationUrl": "https://www.dexter.com/support/technical-information/?model=t-400",
       "id": 41,
       "lastStatusChangeTimestamp": 1788801976058,
       "laundromatId": 3,
@@ -646,7 +681,7 @@
     },
     {
       "brand": "Dexter",
-      "documentationUrl": "https://www.dexter.com/support/technical-information/?model\u003dt-650-express",
+      "documentationUrl": "https://www.dexter.com/support/technical-information/?model=t-650-express",
       "id": 42,
       "lastStatusChangeTimestamp": 1788802106860,
       "laundromatId": 3,
@@ -659,7 +694,7 @@
     },
     {
       "brand": "Dexter",
-      "documentationUrl": "https://www.dexter.com/support/technical-information/?model\u003dt-600-exp",
+      "documentationUrl": "https://www.dexter.com/support/technical-information/?model=t-600-exp",
       "id": 43,
       "lastStatusChangeTimestamp": 1788802150762,
       "laundromatId": 3,
@@ -672,7 +707,7 @@
     },
     {
       "brand": "Speed Queen",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSTT30N",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=STT30N",
       "id": 44,
       "lastStatusChangeTimestamp": 1788802330455,
       "laundromatId": 3,
@@ -686,7 +721,7 @@
     },
     {
       "brand": "Speed Queen",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSTT30N",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=STT30N",
       "id": 46,
       "lastStatusChangeTimestamp": 1788881608091,
       "laundromatId": 2,
@@ -700,7 +735,7 @@
     },
     {
       "brand": "Speed Queen",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSTT30N",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=STT30N",
       "id": 47,
       "lastStatusChangeTimestamp": 1788881708730,
       "laundromatId": 2,
@@ -714,7 +749,7 @@
     },
     {
       "brand": "Huebsch",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dHTT30L",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=HTT30L",
       "id": 48,
       "lastStatusChangeTimestamp": 1788881764288,
       "laundromatId": 2,
@@ -728,7 +763,7 @@
     },
     {
       "brand": "Huebsch",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dHTT30L",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=HTT30L",
       "id": 49,
       "lastStatusChangeTimestamp": 1788881832906,
       "laundromatId": 2,
@@ -742,7 +777,7 @@
     },
     {
       "brand": "Huebsch",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dHTT30N",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=HTT30N",
       "id": 51,
       "lastStatusChangeTimestamp": 1788881953590,
       "laundromatId": 2,
@@ -756,7 +791,7 @@
     },
     {
       "brand": "Huebsch",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dHTT30N",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=HTT30N",
       "id": 52,
       "lastStatusChangeTimestamp": 1788882003355,
       "laundromatId": 2,
@@ -770,7 +805,7 @@
     },
     {
       "brand": "Speed Queen",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCN020LCF",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=SCN020LCF",
       "id": 53,
       "lastStatusChangeTimestamp": 1788961228020,
       "laundromatId": 3,
@@ -784,7 +819,7 @@
     },
     {
       "brand": "Dexter",
-      "documentationUrl": "https://www.dexter.com/support/technical-information/?model\u003dt-400",
+      "documentationUrl": "https://www.dexter.com/support/technical-information/?model=t-400",
       "id": 54,
       "lastStatusChangeTimestamp": 1788961533251,
       "laundromatId": 2,
@@ -798,7 +833,7 @@
     },
     {
       "brand": "Huebsch",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dHC40MD2",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=HC40MD2",
       "id": 55,
       "lastStatusChangeTimestamp": 1788961602099,
       "laundromatId": 2,
@@ -812,7 +847,7 @@
     },
     {
       "brand": "Speed Queen",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCL040GC2",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=SCL040GC2",
       "id": 56,
       "lastStatusChangeTimestamp": 1788961659145,
       "laundromatId": 2,
@@ -826,7 +861,7 @@
     },
     {
       "brand": "Speed Queen",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCL030GC2",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=SCL030GC2",
       "id": 57,
       "lastStatusChangeTimestamp": 1788961706734,
       "laundromatId": 2,
@@ -840,7 +875,7 @@
     },
     {
       "brand": "Huebsch",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dHC40AC2",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=HC40AC2",
       "id": 58,
       "lastStatusChangeTimestamp": 1788961772343,
       "laundromatId": 2,
@@ -854,7 +889,7 @@
     },
     {
       "brand": "Speed Queen",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCT040NC",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=SCT040NC",
       "id": 59,
       "lastStatusChangeTimestamp": 1788961880798,
       "laundromatId": 2,
@@ -868,7 +903,7 @@
     },
     {
       "brand": "Dexter",
-      "documentationUrl": "https://www.dexter.com/support/technical-information/?model\u003dt-300",
+      "documentationUrl": "https://www.dexter.com/support/technical-information/?model=t-300",
       "id": 60,
       "lastStatusChangeTimestamp": 1788961972019,
       "laundromatId": 2,
@@ -882,7 +917,7 @@
     },
     {
       "brand": "Dexter",
-      "documentationUrl": "https://www.dexter.com/support/technical-information/?model\u003dt-300",
+      "documentationUrl": "https://www.dexter.com/support/technical-information/?model=t-300",
       "id": 61,
       "lastStatusChangeTimestamp": 1788962066776,
       "laundromatId": 2,
@@ -896,7 +931,7 @@
     },
     {
       "brand": "Dexter",
-      "documentationUrl": "https://www.dexter.com/support/technical-information/?model\u003dt-300",
+      "documentationUrl": "https://www.dexter.com/support/technical-information/?model=t-300",
       "id": 62,
       "lastStatusChangeTimestamp": 1788962129117,
       "laundromatId": 2,
@@ -910,7 +945,7 @@
     },
     {
       "brand": "Dexter",
-      "documentationUrl": "https://www.dexter.com/support/technical-information/?model\u003dt-300",
+      "documentationUrl": "https://www.dexter.com/support/technical-information/?model=t-300",
       "id": 63,
       "lastStatusChangeTimestamp": 1788962257564,
       "laundromatId": 2,
@@ -924,7 +959,7 @@
     },
     {
       "brand": "Speed Queen",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCN020WCV",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=SCN020WCV",
       "id": 64,
       "lastStatusChangeTimestamp": 1788962739863,
       "laundromatId": 2,
@@ -938,7 +973,7 @@
     },
     {
       "brand": "Continental",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dRMG040X11",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=RMG040X11",
       "id": 65,
       "lastStatusChangeTimestamp": 1788966358347,
       "laundromatId": 3,
@@ -952,7 +987,7 @@
     },
     {
       "brand": "Continental",
-      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dRMG040X11",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model=RMG040X11",
       "id": 66,
       "lastStatusChangeTimestamp": 1788966496305,
       "laundromatId": 3,
