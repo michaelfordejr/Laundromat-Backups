@@ -56,6 +56,7 @@
                     <p class="text-gray-500">Track and manage your maintenance stock</p>
                 </div>
                 <div class="flex space-x-3">
+                    <button @click="showAddPartModal = true" class="bg-blue-600 text-white px-4 py-2 rounded-xl font-bold hover:bg-blue-700 transition">Add Part</button>
                     <button @click="generatePO()" class="bg-blue-50 text-blue-600 px-4 py-2 rounded-xl font-bold hover:bg-blue-100 transition">Order Parts</button>
                     <button @click="saveData()" :disabled="!isDirty" :class="isDirty ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-400'" class="px-6 py-2 rounded-xl font-bold shadow transition">
                         Sync Changes
@@ -70,6 +71,7 @@
                             <th class="p-6 text-xs font-bold text-gray-400 uppercase">Part Details</th>
                             <th class="p-6 text-xs font-bold text-gray-400 uppercase text-center">In Stock</th>
                             <th class="p-6 text-xs font-bold text-gray-400 uppercase">Status</th>
+                            <th class="p-6 no-print"></th>
                         </tr>
                     </thead>
                     <tbody class="divide-y">
@@ -94,6 +96,11 @@
                                         <span class="bg-green-100 text-green-700 px-3 py-1 rounded-lg text-[10px] font-black uppercase">Available</span>
                                     </template>
                                 </td>
+                                <td class="p-6 text-right no-print">
+                                    <button @click="deletePart(part)" class="text-gray-300 hover:text-red-500 transition">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                    </button>
+                                </td>
                             </tr>
                         </template>
                     </tbody>
@@ -102,17 +109,64 @@
         </div>
     </main>
 
+    <!-- Add Part Modal -->
+    <div x-show="showAddPartModal" x-cloak class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-[60] backdrop-blur-sm no-print">
+        <div class="bg-white rounded-[40px] p-10 w-full max-w-md shadow-2xl">
+            <h3 class="text-2xl font-black mb-6 text-gray-900">Add New Spare Part</h3>
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Part Name</label>
+                    <input type="text" x-model="newPart.name" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold" placeholder="e.g. Drive Belt">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Part Number</label>
+                    <input type="text" x-model="newPart.partNumber" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold" placeholder="e.g. 12345-AB">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Stock Quantity</label>
+                        <input type="number" x-model.number="newPart.stockQuantity" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Min Threshold</label>
+                        <input type="number" x-model.number="newPart.minimumThreshold" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold">
+                    </div>
+                </div>
+                <button @click="addPart()" class="w-full bg-blue-600 text-white p-5 rounded-2xl font-black shadow-lg hover:bg-blue-700 transition active:scale-95">Add to Inventory</button>
+                <button @click="showAddPartModal = false" class="w-full text-gray-400 font-bold hover:text-gray-600 transition">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         function inventoryApp() {
             const shared = getPortalApp();
             return {
                 ...shared,
+                showAddPartModal: false,
+                newPart: { name: '', partNumber: '', stockQuantity: 0, minimumThreshold: 5 },
                 async init() {
                     await this.initShared();
                 },
                 updateStock(part, delta) {
                     part.stockQuantity = Math.max(0, part.stockQuantity + delta);
                     this.isDirty = true;
+                },
+                addPart() {
+                    if (!this.newPart.name || !this.newPart.partNumber) return alert('Please enter part name and number.');
+                    this.data.spareParts.push({
+                        id: Date.now(),
+                        ...this.newPart
+                    });
+                    this.isDirty = true;
+                    this.showAddPartModal = false;
+                    this.newPart = { name: '', partNumber: '', stockQuantity: 0, minimumThreshold: 5 };
+                },
+                deletePart(part) {
+                    if (confirm('Delete ' + part.name + ' from inventory?')) {
+                        this.data.spareParts = this.data.spareParts.filter(p => p.id !== part.id);
+                        this.isDirty = true;
+                    }
                 },
                 generatePO() {
                     const low = this.data.spareParts.filter(p => p.stockQuantity <= p.minimumThreshold);
