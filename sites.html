@@ -110,8 +110,16 @@
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <template x-for="machine in getWashersForSite(selectedSite?.id)" :key="machine.id">
-                        <div class="bg-white p-6 rounded-2xl border-2 border-gray-50 hover:border-blue-100 transition shadow-sm">
-                            <div class="flex justify-between items-start mb-4">
+                        <div class="bg-white p-6 rounded-2xl border-2 transition shadow-sm relative group"
+                             :class="isSelected(machine.id) ? 'border-blue-500 ring-2 ring-blue-200' : 'border-gray-50 hover:border-blue-100'">
+
+                            <!-- Selection Checkbox -->
+                            <div class="absolute top-4 left-4 z-10">
+                                <input type="checkbox" :checked="isSelected(machine.id)" @change="toggleSelection(machine.id)"
+                                       class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
+                            </div>
+
+                            <div class="flex justify-between items-start mb-4 ml-8">
                                 <span :class="'status-' + machine.status" class="text-[10px] font-black uppercase tracking-wider" x-text="machine.status"></span>
                                 <select x-model="machine.status" @change="markDirty()" class="text-[10px] border-none bg-gray-50 rounded p-1">
                                     <option value="OPERATIONAL">WORKING</option>
@@ -119,10 +127,10 @@
                                     <option value="DOWN">FAULT</option>
                                 </select>
                             </div>
-                            <h4 class="font-black text-gray-900 text-lg mb-1" x-text="machine.nickname || (machine.brand + ' ' + machine.model)"></h4>
-                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-6" x-text="machine.size"></p>
+                            <h4 class="font-black text-gray-900 text-lg mb-1 ml-8" x-text="machine.nickname || (machine.brand + ' ' + machine.model)"></h4>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-6 ml-8" x-text="machine.size"></p>
 
-                            <div class="flex space-x-2">
+                            <div class="flex space-x-2 ml-8">
                                  <button @click="openLogDialog(machine)" class="flex-1 bg-gray-900 text-white text-[10px] font-black py-2 rounded-lg uppercase">+ Log Service</button>
                                  <button @click="webTroubleshoot(machine)" class="flex-1 border text-blue-600 text-[10px] font-black py-2 rounded-lg uppercase">Troubleshoot</button>
                             </div>
@@ -142,8 +150,16 @@
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <template x-for="machine in getDryersForSite(selectedSite?.id)" :key="machine.id">
-                        <div class="bg-white p-6 rounded-2xl border-2 border-gray-50 hover:border-blue-100 transition shadow-sm">
-                            <div class="flex justify-between items-start mb-4">
+                        <div class="bg-white p-6 rounded-2xl border-2 transition shadow-sm relative group"
+                             :class="isSelected(machine.id) ? 'border-blue-500 ring-2 ring-blue-200' : 'border-gray-50 hover:border-blue-100'">
+
+                            <!-- Selection Checkbox -->
+                            <div class="absolute top-4 left-4 z-10">
+                                <input type="checkbox" :checked="isSelected(machine.id)" @change="toggleSelection(machine.id)"
+                                       class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
+                            </div>
+
+                            <div class="flex justify-between items-start mb-4 ml-8">
                                 <span :class="'status-' + machine.status" class="text-[10px] font-black uppercase tracking-wider" x-text="machine.status"></span>
                                 <select x-model="machine.status" @change="markDirty()" class="text-[10px] border-none bg-gray-50 rounded p-1">
                                     <option value="OPERATIONAL">WORKING</option>
@@ -151,10 +167,10 @@
                                     <option value="DOWN">FAULT</option>
                                 </select>
                             </div>
-                            <h4 class="font-black text-gray-900 text-lg mb-1" x-text="machine.nickname || (machine.brand + ' ' + machine.model)"></h4>
-                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-6" x-text="machine.size"></p>
+                            <h4 class="font-black text-gray-900 text-lg mb-1 ml-8" x-text="machine.nickname || (machine.brand + ' ' + machine.model)"></h4>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-6 ml-8" x-text="machine.size"></p>
 
-                            <div class="flex space-x-2">
+                            <div class="flex space-x-2 ml-8">
                                  <button @click="openLogDialog(machine)" class="flex-1 bg-gray-900 text-white text-[10px] font-black py-2 rounded-lg uppercase">+ Log Service</button>
                                  <button @click="webTroubleshoot(machine)" class="flex-1 border text-blue-600 text-[10px] font-black py-2 rounded-lg uppercase">Troubleshoot</button>
                             </div>
@@ -167,6 +183,59 @@
             </div>
         </div>
     </main>
+
+    <!-- Floating Batch Bar -->
+    <div x-show="selectedIds.length > 0" x-transition x-cloak
+         class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-8 py-4 rounded-3xl shadow-2xl flex items-center space-x-6 z-50 border border-gray-700 no-print">
+        <div class="flex items-center space-x-2">
+            <span class="bg-blue-600 text-[10px] font-black w-6 h-6 flex items-center justify-center rounded-full" x-text="selectedIds.length"></span>
+            <span class="text-xs font-bold uppercase tracking-widest">Units Selected</span>
+        </div>
+        <div class="h-6 w-px bg-gray-700"></div>
+        <button @click="openBatchLogDialog()" class="text-xs font-black uppercase tracking-wider hover:text-blue-400 transition">Batch Log</button>
+        <button @click="openBatchScheduleDialog()" class="text-xs font-black uppercase tracking-wider hover:text-blue-400 transition">Batch Schedule</button>
+        <button @click="clearSelection()" class="text-gray-400 hover:text-white transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+    </div>
+
+    <!-- Batch Log Modal -->
+    <div x-show="batchLogModal.show" x-cloak class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-[60] backdrop-blur-sm no-print">
+        <div class="bg-white rounded-[40px] p-10 w-full max-w-md shadow-2xl">
+            <h3 class="text-2xl font-black mb-6" x-text="'Batch Log (' + selectedIds.length + ' units)'"></h3>
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Service Action</label>
+                    <input type="text" x-model="batchLogModal.action" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold" placeholder="e.g. Monthly Cleaning">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Notes</label>
+                    <textarea x-model="batchLogModal.notes" class="w-full p-4 bg-gray-50 border rounded-2xl h-32" placeholder="Details..."></textarea>
+                </div>
+                <button @click="saveBatchLog()" class="w-full bg-blue-600 text-white p-5 rounded-2xl font-black shadow-lg hover:bg-blue-700 transition">Commit Batch Entry</button>
+                <button @click="batchLogModal.show = false" class="w-full text-gray-400 font-bold">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Batch Schedule Modal -->
+    <div x-show="batchScheduleModal.show" x-cloak class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-[60] backdrop-blur-sm no-print">
+        <div class="bg-white rounded-[40px] p-10 w-full max-w-md shadow-2xl">
+            <h3 class="text-2xl font-black mb-6" x-text="'Batch Schedule (' + selectedIds.length + ' units)'"></h3>
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Maintenance Task</label>
+                    <input type="text" x-model="batchScheduleModal.task" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold" placeholder="e.g. Belt Inspection">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Scheduled Date</label>
+                    <input type="date" x-model="batchScheduleModal.date" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold">
+                </div>
+                <button @click="saveBatchSchedule()" class="w-full bg-orange-600 text-white p-5 rounded-2xl font-black shadow-lg hover:bg-orange-700 transition">Set Team Schedule</button>
+                <button @click="batchScheduleModal.show = false" class="w-full text-gray-400 font-bold">Cancel</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Print View -->
     <div x-show="isPrinting" class="hidden print-only p-8">
@@ -217,7 +286,10 @@
                 selectedSite: null,
                 isPrinting: false,
                 printingSite: null,
+                selectedIds: [],
                 logModal: { show: false, machine: null, action: '', notes: '' },
+                batchLogModal: { show: false, action: '', notes: '' },
+                batchScheduleModal: { show: false, task: '', date: '' },
 
                 async init() {
                     await this.initShared();
@@ -225,7 +297,24 @@
 
                 openSite(site) {
                     this.selectedSite = site;
+                    this.clearSelection();
                     this.view = 'inventory';
+                },
+
+                isSelected(id) {
+                    return this.selectedIds.includes(id);
+                },
+
+                toggleSelection(id) {
+                    if (this.isSelected(id)) {
+                        this.selectedIds = this.selectedIds.filter(i => i !== id);
+                    } else {
+                        this.selectedIds.push(id);
+                    }
+                },
+
+                clearSelection() {
+                    this.selectedIds = [];
                 },
 
                 getMachinesForSite(id) {
@@ -245,6 +334,53 @@
                 openLogDialog(machine) {
                     this.logModal.machine = machine;
                     this.logModal.show = true;
+                },
+
+                openBatchLogDialog() {
+                    this.batchLogModal.action = '';
+                    this.batchLogModal.notes = '';
+                    this.batchLogModal.show = true;
+                },
+
+                saveBatchLog() {
+                    if (!this.batchLogModal.action) return;
+                    this.selectedIds.forEach(id => {
+                        this.data.logs.push({
+                            id: Date.now() + Math.random(),
+                            machineId: id,
+                            timestamp: Date.now(),
+                            action: this.batchLogModal.action,
+                            notes: this.batchLogModal.notes + "\n\n(Logged via: " + this.deviceName + ")"
+                        });
+                    });
+                    this.isDirty = true;
+                    this.batchLogModal.show = false;
+                    this.clearSelection();
+                },
+
+                openBatchScheduleDialog() {
+                    this.batchScheduleModal.task = '';
+                    this.batchScheduleModal.date = '';
+                    this.batchScheduleModal.show = true;
+                },
+
+                saveBatchSchedule() {
+                    if (!this.batchScheduleModal.task || !this.batchScheduleModal.date) return;
+                    const timestamp = new Date(this.batchScheduleModal.date).getTime();
+                    this.selectedIds.forEach(id => {
+                        this.data.scheduledMaintenance.push({
+                            id: Date.now() + Math.random(),
+                            machineId: id,
+                            taskName: this.batchScheduleModal.task,
+                            scheduledTimestamp: timestamp,
+                            isRecurring: false,
+                            recurrenceIntervalDays: 0,
+                            isCompleted: false
+                        });
+                    });
+                    this.isDirty = true;
+                    this.batchScheduleModal.show = false;
+                    this.clearSelection();
                 },
 
                 addLog() {
