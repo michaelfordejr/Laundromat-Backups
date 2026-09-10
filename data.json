@@ -122,6 +122,13 @@
       "machineId": 2,
       "notes": "Scheduled maintenance completed.",
       "timestamp": 1788974413042
+    },
+    {
+      "action": "Status Change: DOWN",
+      "id": 16,
+      "machineId": 29,
+      "notes": "Error ed02, drive inverter faulty",
+      "timestamp": 1789062084223
     }
   ],
   "machines": [
@@ -477,14 +484,14 @@
       "brand": "Speed Queen",
       "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCN020LCF",
       "id": 29,
-      "lastStatusChangeTimestamp": 1788797216025,
+      "lastStatusChangeTimestamp": 1789062084184,
       "laundromatId": 3,
       "model": "SCN020LCF",
       "nickname": "12 Speed Queen SCN020LCF",
       "position": 11,
       "serialNumber": "1703066201",
       "size": "20 lb",
-      "status": "OPERATIONAL",
+      "status": "DOWN",
       "type": "WASHER"
     },
     {
