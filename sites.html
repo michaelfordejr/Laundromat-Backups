@@ -32,6 +32,10 @@
                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                 Sites
             </a>
+            <a href="reports.html" class="flex items-center p-3 rounded-lg hover:bg-gray-800 transition">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                Reports
+            </a>
             <a href="inventory.html" class="flex items-center p-3 rounded-lg hover:bg-gray-800 transition">
                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                 Inventory
@@ -98,25 +102,67 @@
                 <p class="text-gray-500" x-text="selectedSite?.location"></p>
             </header>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <template x-for="machine in getMachinesForSite(selectedSite?.id)" :key="machine.id">
-                    <div class="bg-white p-6 rounded-2xl border-2 border-gray-50 hover:border-blue-100 transition shadow-sm">
-                        <div class="flex justify-between items-start mb-4">
-                            <span :class="'status-' + machine.status" class="text-[10px] font-black uppercase tracking-wider" x-text="machine.status"></span>
-                            <select x-model="machine.status" @change="markDirty()" class="text-[10px] border-none bg-gray-50 rounded p-1">
-                                <option value="OPERATIONAL">WORKING</option>
-                                <option value="SERVICE_REQUIRED">MAINTENANCE</option>
-                                <option value="DOWN">FAULT</option>
-                            </select>
-                        </div>
-                        <h4 class="font-black text-gray-900 text-lg mb-1" x-text="machine.nickname || (machine.brand + ' ' + machine.model)"></h4>
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-6" x-text="machine.type + ' - ' + machine.size"></p>
+            <!-- Washers Section -->
+            <div class="mb-12">
+                <h3 class="text-xl font-black text-blue-600 uppercase tracking-widest mb-6 flex items-center">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    Washers
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <template x-for="machine in getWashersForSite(selectedSite?.id)" :key="machine.id">
+                        <div class="bg-white p-6 rounded-2xl border-2 border-gray-50 hover:border-blue-100 transition shadow-sm">
+                            <div class="flex justify-between items-start mb-4">
+                                <span :class="'status-' + machine.status" class="text-[10px] font-black uppercase tracking-wider" x-text="machine.status"></span>
+                                <select x-model="machine.status" @change="markDirty()" class="text-[10px] border-none bg-gray-50 rounded p-1">
+                                    <option value="OPERATIONAL">WORKING</option>
+                                    <option value="SERVICE_REQUIRED">MAINTENANCE</option>
+                                    <option value="DOWN">FAULT</option>
+                                </select>
+                            </div>
+                            <h4 class="font-black text-gray-900 text-lg mb-1" x-text="machine.nickname || (machine.brand + ' ' + machine.model)"></h4>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-6" x-text="machine.size"></p>
 
-                        <div class="flex space-x-2">
-                             <button @click="openLogDialog(machine)" class="flex-1 bg-gray-900 text-white text-[10px] font-black py-2 rounded-lg uppercase">+ Log Service</button>
-                             <button @click="webTroubleshoot(machine)" class="flex-1 border text-blue-600 text-[10px] font-black py-2 rounded-lg uppercase">Troubleshoot</button>
+                            <div class="flex space-x-2">
+                                 <button @click="openLogDialog(machine)" class="flex-1 bg-gray-900 text-white text-[10px] font-black py-2 rounded-lg uppercase">+ Log Service</button>
+                                 <button @click="webTroubleshoot(machine)" class="flex-1 border text-blue-600 text-[10px] font-black py-2 rounded-lg uppercase">Troubleshoot</button>
+                            </div>
                         </div>
-                    </div>
+                    </template>
+                </div>
+                <template x-if="getWashersForSite(selectedSite?.id).length === 0">
+                    <p class="text-gray-400 italic text-sm">No washers at this site.</p>
+                </template>
+            </div>
+
+            <!-- Dryers Section -->
+            <div>
+                <h3 class="text-xl font-black text-orange-600 uppercase tracking-widest mb-6 flex items-center">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    Dryers
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <template x-for="machine in getDryersForSite(selectedSite?.id)" :key="machine.id">
+                        <div class="bg-white p-6 rounded-2xl border-2 border-gray-50 hover:border-blue-100 transition shadow-sm">
+                            <div class="flex justify-between items-start mb-4">
+                                <span :class="'status-' + machine.status" class="text-[10px] font-black uppercase tracking-wider" x-text="machine.status"></span>
+                                <select x-model="machine.status" @change="markDirty()" class="text-[10px] border-none bg-gray-50 rounded p-1">
+                                    <option value="OPERATIONAL">WORKING</option>
+                                    <option value="SERVICE_REQUIRED">MAINTENANCE</option>
+                                    <option value="DOWN">FAULT</option>
+                                </select>
+                            </div>
+                            <h4 class="font-black text-gray-900 text-lg mb-1" x-text="machine.nickname || (machine.brand + ' ' + machine.model)"></h4>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-6" x-text="machine.size"></p>
+
+                            <div class="flex space-x-2">
+                                 <button @click="openLogDialog(machine)" class="flex-1 bg-gray-900 text-white text-[10px] font-black py-2 rounded-lg uppercase">+ Log Service</button>
+                                 <button @click="webTroubleshoot(machine)" class="flex-1 border text-blue-600 text-[10px] font-black py-2 rounded-lg uppercase">Troubleshoot</button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <template x-if="getDryersForSite(selectedSite?.id).length === 0">
+                    <p class="text-gray-400 italic text-sm">No dryers at this site.</p>
                 </template>
             </div>
         </div>
@@ -125,12 +171,25 @@
     <!-- Print View -->
     <div x-show="isPrinting" class="hidden print-only p-8">
         <h1 class="text-2xl font-black mb-8 border-b pb-4" x-text="'QR Labels: ' + printingSite?.name"></h1>
-        <div class="grid grid-cols-3 gap-8">
-            <template x-for="machine in getMachinesForSite(printingSite?.id)" :key="machine.id">
+
+        <h2 class="text-xl font-bold mt-8 mb-4 text-blue-600">Washers</h2>
+        <div class="grid grid-cols-3 gap-8 mb-12">
+            <template x-for="machine in getWashersForSite(printingSite?.id)" :key="machine.id">
                 <div class="border p-4 text-center rounded-xl">
                     <canvas :id="'qr-' + machine.id" class="mx-auto mb-2"></canvas>
                     <p class="font-bold text-xs" x-text="machine.nickname || machine.model"></p>
-                    <p class="text-[8px] text-gray-500 uppercase" x-text="machine.brand"></p>
+                    <p class="text-[8px] text-gray-500 uppercase" x-text="machine.size"></p>
+                </div>
+            </template>
+        </div>
+
+        <h2 class="text-xl font-bold mt-8 mb-4 text-orange-600">Dryers</h2>
+        <div class="grid grid-cols-3 gap-8">
+            <template x-for="machine in getDryersForSite(printingSite?.id)" :key="machine.id">
+                <div class="border p-4 text-center rounded-xl">
+                    <canvas :id="'qr-' + machine.id" class="mx-auto mb-2"></canvas>
+                    <p class="font-bold text-xs" x-text="machine.nickname || machine.model"></p>
+                    <p class="text-[8px] text-gray-500 uppercase" x-text="machine.size"></p>
                 </div>
             </template>
         </div>
@@ -173,6 +232,14 @@
                     return this.data.machines.filter(m => m.laundromatId === id);
                 },
 
+                getWashersForSite(id) {
+                    return this.data.machines.filter(m => m.laundromatId === id && m.type === 'WASHER');
+                },
+
+                getDryersForSite(id) {
+                    return this.data.machines.filter(m => m.laundromatId === id && m.type === 'DRYER');
+                },
+
                 markDirty() { this.isDirty = true; },
 
                 openLogDialog(machine) {
@@ -206,7 +273,7 @@
                 },
 
                 webTroubleshoot(m) {
-                    const query = `site:manualslib.com OR site:fix.com ${m.brand} ${m.model} troubleshoot error codes`;
+                    const query = `${m.brand} ${m.model} troubleshoot error codes fix`;
                     window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
                 }
             }
