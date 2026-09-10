@@ -7,6 +7,7 @@ function getPortalApp() {
         tempToken: '',
         user: null,
         data: { laundromats: [], machines: [], logs: [], spareParts: [], scheduledMaintenance: [], documents: [] },
+        reports: [],
         loading: false,
         isDirty: false,
         sha: '',
@@ -64,10 +65,30 @@ function getPortalApp() {
                     this.data = JSON.parse(decoded);
                     this.isDirty = false;
                 }
+
+                // Fetch reports list
+                await this.fetchReports();
             } catch (e) {
                 console.error(e);
             }
             this.loading = false;
+        },
+
+        async fetchReports() {
+            try {
+                const res = await fetch(`https://api.github.com/repos/${this.user.login}/${REPO_NAME}/contents/reports`, {
+                    headers: { 'Authorization': `token ${this.token}` }
+                });
+                if (res.ok) {
+                    this.reports = await res.json();
+                }
+            } catch (e) {
+                console.error("Failed to fetch reports", e);
+            }
+        },
+
+        getReportUrl(path) {
+            return `https://api.github.com/repos/${this.user.login}/${REPO_NAME}/contents/${path}?access_token=${this.token}`;
         },
 
         async saveData() {
