@@ -6,109 +6,332 @@
     <title>Laundromat Management Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         [x-cloak] { display: none !important; }
-        .status-Working { color: #2E7D32; }
-        .status-Maintenance { color: #EF6C00; }
-        .status-Fault { color: #B71C1C; }
+        .status-Working, .status-OPERATIONAL { color: #2E7D32; font-weight: bold; }
+        .status-Maintenance, .status-SERVICE_REQUIRED { color: #EF6C00; font-weight: bold; }
+        .status-Fault, .status-DOWN { color: #B71C1C; font-weight: bold; }
+        .sidebar-item { @apply flex items-center p-3 rounded-lg cursor-pointer transition; }
+        .sidebar-item:hover { @apply bg-gray-800; }
+        .sidebar-item.active { @apply bg-blue-600 text-white; }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen" x-data="portalApp()" x-init="init()">
-    <nav class="bg-black text-white p-4 shadow-lg">
-        <div class="container mx-auto flex justify-between items-center">
+<body class="bg-gray-100 min-h-screen flex" x-data="portalApp()" x-init="init()">
+
+    <!-- Sidebar -->
+    <aside x-show="token" x-cloak class="w-64 bg-black text-gray-300 flex flex-col fixed h-full z-40">
+        <div class="p-6 border-b border-gray-800">
             <h1 class="text-xl font-bold flex items-center">
                 <span class="text-blue-500 mr-2">N|M</span> Fleet Portal
             </h1>
-            <div class="flex items-center space-x-4">
-                <template x-if="user">
-                    <span class="text-sm text-gray-400" x-text="'Logged in as ' + user.login"></span>
-                </template>
-                <button @click="logout()" x-show="token" class="text-sm bg-red-900 px-3 py-1 rounded">Logout</button>
-            </div>
         </div>
-    </nav>
+        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+            <div @click="view = 'dashboard'" :class="view === 'dashboard' ? 'active' : ''" class="sidebar-item">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                Dashboard
+            </div>
+            <div @click="view = 'sites'" :class="view === 'sites' ? 'active' : ''" class="sidebar-item">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                Sites
+            </div>
+            <div @click="view = 'inventory'" :class="view === 'inventory' ? 'active' : ''" class="sidebar-item">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                Inventory
+            </div>
+            <div @click="view = 'analytics'" :class="view === 'analytics' ? 'active' : ''" class="sidebar-item">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 01-2 2h22a2 2 0 01-2-2v-10a2 2 0 00-2-2h-2a2 2 0 00-2 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                Analytics
+            </div>
+        </nav>
+        <div class="p-4 border-t border-gray-800">
+            <div @click="view = 'settings'" :class="view === 'settings' ? 'active' : ''" class="sidebar-item">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                Settings
+            </div>
+            <button @click="logout()" class="w-full mt-4 bg-red-900 hover:bg-red-800 p-2 rounded text-sm transition">Logout</button>
+        </div>
+    </aside>
 
-    <div class="container mx-auto p-6">
+    <!-- Main Content -->
+    <main class="flex-1 ml-64 p-8 overflow-y-auto" :class="!token ? 'ml-0' : ''">
+
         <!-- Auth View -->
-        <div x-show="!token" x-cloak class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-md mt-12">
-            <h2 class="text-2xl font-bold mb-6 text-center">GitHub Access Required</h2>
-            <p class="text-gray-600 mb-6 text-sm">Enter a GitHub Personal Access Token (PAT) with <b>'repo'</b> scope to manage your fleet.</p>
-            <input type="password" x-model="tempToken" placeholder="GitHub Token" class="w-full p-3 border rounded mb-4">
-            <button @click="login()" class="w-full bg-blue-600 text-white p-3 rounded font-bold hover:bg-blue-700 transition">Connect</button>
-            <div class="mt-6 text-xs text-gray-500">
-                <p>Don't have a token? <a href="https://github.com/settings/tokens/new?scopes=repo&description=LaundromatPortal" target="_blank" class="text-blue-500 underline">Generate one here</a></p>
+        <div x-show="!token" x-cloak class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-xl mt-24">
+            <div class="text-center mb-8">
+                <h2 class="text-4xl font-black mb-2"><span class="text-blue-600">N|M</span> Fleet</h2>
+                <p class="text-gray-500 uppercase tracking-widest text-xs font-bold">Portal Access</p>
+            </div>
+            <div class="space-y-4">
+                <p class="text-gray-600 text-sm text-center">Connect using your GitHub Personal Access Token (PAT) with <b>'repo'</b> scope.</p>
+                <input type="password" x-model="tempToken" placeholder="GitHub Access Token" class="w-full p-4 bg-gray-50 border-2 border-gray-100 rounded-xl focus:border-blue-500 outline-none transition">
+                <button @click="login()" class="w-full bg-blue-600 text-white p-4 rounded-xl font-black shadow-lg shadow-blue-200 hover:bg-blue-700 hover:scale-[1.02] transition active:scale-95">Connect to Fleet</button>
+            </div>
+            <div class="mt-12 text-center text-xs text-gray-400 border-t pt-6">
+                <p>No token? <a href="https://github.com/settings/tokens/new?scopes=repo&description=LaundromatPortal" target="_blank" class="text-blue-500 font-bold hover:underline">Generate one on GitHub</a></p>
             </div>
         </div>
 
-        <!-- Dashboard View -->
-        <div x-show="token" x-cloak>
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="text-3xl font-extrabold text-gray-800">Fleet Overview</h2>
-                <div class="flex space-x-2">
-                    <button @click="fetchData()" class="bg-white border p-2 rounded shadow-sm hover:bg-gray-50">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+        <!-- App Views -->
+        <div x-show="token" x-cloak class="max-w-6xl mx-auto">
+
+            <!-- Global Header -->
+            <header class="flex justify-between items-center mb-10">
+                <div>
+                    <h2 class="text-3xl font-black text-gray-900 capitalize" x-text="view"></h2>
+                    <p class="text-gray-500" x-text="getCurrentBreadcrumb()"></p>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button @click="fetchData()" class="bg-white border-2 border-gray-100 p-3 rounded-xl hover:bg-gray-50 transition shadow-sm" title="Refresh Data">
+                        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" :class="loading ? 'animate-spin' : ''"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                     </button>
-                    <button @click="saveData()" :disabled="!isDirty" :class="isDirty ? 'bg-green-600 text-white' : 'bg-gray-300 text-gray-500'" class="px-6 py-2 rounded font-bold shadow transition">
-                        Save Changes
+                    <button @click="saveData()" :disabled="!isDirty" :class="isDirty ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-400'" class="px-8 py-3 rounded-xl font-black shadow-lg transition hover:scale-105 active:scale-95">
+                        <span x-text="isDirty ? 'Save Cloud Updates' : 'Cloud Sync OK'"></span>
                     </button>
+                </div>
+            </header>
+
+            <!-- 1. Dashboard View -->
+            <div x-show="view === 'dashboard'" class="space-y-8">
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <p class="text-xs font-bold text-gray-400 uppercase">Total Fleet</p>
+                        <p class="text-3xl font-black" x-text="data.machines.length"></p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <p class="text-xs font-bold text-red-400 uppercase">Active Faults</p>
+                        <p class="text-3xl font-black text-red-600" x-text="data.machines.filter(m => m.status === 'DOWN').length"></p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <p class="text-xs font-bold text-orange-400 uppercase">Maintenance Required</p>
+                        <p class="text-3xl font-black text-orange-600" x-text="data.machines.filter(m => m.status === 'SERVICE_REQUIRED').length"></p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <p class="text-xs font-bold text-green-400 uppercase">Operational Uptime</p>
+                        <p class="text-3xl font-black text-green-600" x-text="Math.round((data.machines.filter(m => m.status === 'OPERATIONAL').length / data.machines.length) * 100) + '%'"></p>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-6 border-b bg-gray-50 flex justify-between">
+                        <h3 class="font-black text-gray-800">Recent Service Logs</h3>
+                        <button class="text-blue-600 text-sm font-bold">View All</button>
+                    </div>
+                    <div class="divide-y overflow-x-auto">
+                        <template x-for="log in data.logs.slice(-10).reverse()" :key="log.id">
+                            <div class="p-4 hover:bg-gray-50 flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-4">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm font-bold text-gray-900" x-text="log.action"></p>
+                                    <p class="text-xs text-gray-500" x-text="getMachineName(log.machineId)"></p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xs font-medium text-gray-400" x-text="formatDate(log.timestamp)"></p>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
                 </div>
             </div>
 
-            <template x-if="loading">
-                <div class="flex justify-center p-12">
-                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-                </div>
-            </template>
-
-            <!-- Sites -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" x-show="!loading">
+            <!-- 2. Sites View -->
+            <div x-show="view === 'sites'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <template x-for="site in data.laundromats" :key="site.id">
-                    <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
-                        <div class="p-4 border-b bg-gray-50">
-                            <h3 class="font-bold text-lg" x-text="site.name"></h3>
-                            <p class="text-xs text-gray-500" x-text="site.location"></p>
+                    <div class="bg-white rounded-2xl shadow-md border-2 border-transparent hover:border-blue-500 transition overflow-hidden cursor-pointer group" @click="openSite(site)">
+                        <div class="h-24 bg-gray-900 p-6 flex justify-between items-start">
+                            <div class="bg-blue-600 text-white px-3 py-1 rounded-lg text-xs font-black uppercase">Active</div>
                         </div>
-                        <div class="p-4 space-y-3">
-                            <template x-for="machine in getMachinesForSite(site.id)" :key="machine.id">
-                                <div class="p-3 border rounded-lg hover:border-blue-300 transition">
-                                    <div class="flex justify-between items-start mb-2">
-                                        <div>
-                                            <span class="font-semibold block text-sm" x-text="machine.nickname || (machine.brand + ' ' + machine.model)"></span>
-                                            <span class="text-xs text-gray-400" x-text="machine.type + ' - ' + machine.size"></span>
-                                        </div>
-                                        <select x-model="machine.status" @change="markDirty()" :class="'text-xs font-bold px-2 py-1 rounded status-' + machine.status">
-                                            <option value="OPERATIONAL">Working</option>
-                                            <option value="SERVICE_REQUIRED">Maintenance</option>
-                                            <option value="DOWN">Fault</option>
-                                        </select>
-                                    </div>
-                                    <button @click="openLogDialog(machine)" class="text-[10px] text-blue-600 font-bold uppercase tracking-wider hover:underline">+ Add Log</button>
+                        <div class="p-6 -mt-12 bg-white rounded-t-3xl relative">
+                            <h3 class="text-2xl font-black text-gray-900" x-text="site.name"></h3>
+                            <p class="text-gray-500 text-sm mb-6" x-text="site.location"></p>
+
+                            <div class="flex space-x-4 border-t pt-4">
+                                <div>
+                                    <p class="text-[10px] font-bold text-gray-400 uppercase">Machines</p>
+                                    <p class="font-black" x-text="getMachinesForSite(site.id).length"></p>
                                 </div>
-                            </template>
+                                <div>
+                                    <p class="text-[10px] font-bold text-red-400 uppercase">Faults</p>
+                                    <p class="font-black text-red-600" x-text="getMachinesForSite(site.id).filter(m => m.status === 'DOWN').length"></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </template>
             </div>
-        </div>
-    </div>
 
-    <!-- Log Dialog -->
-    <div x-show="logDialog.show" x-cloak class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl">
-            <h3 class="text-xl font-bold mb-4" x-text="'Log Maintenance for ' + (logDialog.machine?.nickname || logDialog.machine?.model)"></h3>
-            <div class="space-y-4">
+            <!-- 3. Machine Detail View -->
+            <div x-show="view === 'machine-detail'" class="space-y-8">
+                <button @click="view = 'sites'" class="text-blue-600 font-bold flex items-center hover:underline">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    Back to Site
+                </button>
+
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-wrap md:flex-nowrap gap-12">
+                    <div class="w-full md:w-1/3">
+                        <div class="aspect-square bg-gray-100 rounded-3xl flex items-center justify-center text-gray-300">
+                             <svg class="w-24 h-24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        </div>
+                    </div>
+                    <div class="flex-1 space-y-6">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h2 class="text-4xl font-black text-gray-900" x-text="selectedMachine?.nickname || (selectedMachine?.brand + ' ' + selectedMachine?.model)"></h2>
+                                <p class="text-gray-500 text-lg" x-text="selectedMachine?.type + ' • ' + selectedMachine?.size"></p>
+                            </div>
+                            <select x-model="selectedMachine.status" @change="markDirty()" :class="'text-lg font-black px-6 py-2 rounded-2xl status-' + selectedMachine?.status">
+                                <option value="OPERATIONAL">OPERATIONAL</option>
+                                <option value="SERVICE_REQUIRED">MAINTENANCE</option>
+                                <option value="DOWN">FAULTY</option>
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 border-t border-b py-6">
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase">Serial Number</p>
+                                <p class="font-bold text-gray-800" x-text="selectedMachine?.serialNumber || 'Not recorded'"></p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase">Brand</p>
+                                <p class="font-bold text-gray-800" x-text="selectedMachine?.brand"></p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <button @click="openLogDialog(selectedMachine)" class="bg-blue-600 text-white px-8 py-4 rounded-2xl font-black shadow-lg hover:bg-blue-700 transition">+ Log New Service</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Machine History -->
+                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-6 border-b font-black text-gray-800">Maintenance History</div>
+                    <div class="divide-y">
+                        <template x-for="log in getLogsForMachine(selectedMachine?.id)" :key="log.id">
+                            <div class="p-6 hover:bg-gray-50">
+                                <div class="flex justify-between mb-2">
+                                    <span class="font-black text-gray-900" x-text="log.action"></span>
+                                    <span class="text-sm text-gray-400" x-text="formatDate(log.timestamp)"></span>
+                                </div>
+                                <p class="text-gray-600" x-text="log.notes"></p>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Inventory View -->
+            <div x-show="view === 'inventory'" class="space-y-6">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50 border-b">
+                            <tr>
+                                <th class="p-4 text-xs font-bold text-gray-500 uppercase">Part Name</th>
+                                <th class="p-4 text-xs font-bold text-gray-500 uppercase">Part #</th>
+                                <th class="p-4 text-xs font-bold text-gray-500 uppercase text-center">Stock</th>
+                                <th class="p-4 text-xs font-bold text-gray-500 uppercase">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <template x-for="part in data.spareParts" :key="part.id">
+                                <tr class="hover:bg-gray-50 transition">
+                                    <td class="p-4 font-bold text-gray-900" x-text="part.name"></td>
+                                    <td class="p-4 text-gray-500 text-sm font-mono" x-text="part.partNumber"></td>
+                                    <td class="p-4 text-center">
+                                        <div class="flex items-center justify-center space-x-3">
+                                            <button @click="updateStock(part, -1)" class="w-8 h-8 rounded-full border hover:bg-gray-100">-</button>
+                                            <span class="font-black w-8" x-text="part.stockQuantity"></span>
+                                            <button @click="updateStock(part, 1)" class="w-8 h-8 rounded-full border hover:bg-gray-100">+</button>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <span :class="part.stockQuantity <= part.minimumThreshold ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'" class="px-3 py-1 rounded-full text-[10px] font-black uppercase" x-text="part.stockQuantity <= part.minimumThreshold ? 'Low Stock' : 'OK'"></span>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 5. Analytics View -->
+            <div x-show="view === 'analytics'" class="space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                        <h3 class="font-black text-gray-800 mb-6">Fleet Uptime Distribution</h3>
+                        <canvas id="uptimeChart"></canvas>
+                    </div>
+                    <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                        <h3 class="font-black text-gray-800 mb-6">Service Frequency by Model</h3>
+                        <canvas id="frequencyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. Settings View -->
+            <div x-show="view === 'settings'" class="max-w-2xl mx-auto space-y-8">
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                    <h3 class="text-xl font-black mb-6">Technician & Device</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Device Identity</label>
+                            <input type="text" x-model="deviceName" @change="saveSettings()" class="w-full p-4 bg-gray-50 border rounded-xl outline-none focus:border-blue-500 transition">
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                    <h3 class="text-xl font-black mb-4 text-red-600">Danger Zone</h3>
+                    <p class="text-sm text-gray-500 mb-6">Disconnecting from this device will remove the local token. You will need to re-authenticate to save changes.</p>
+                    <button @click="logout()" class="w-full bg-red-50 text-red-600 p-4 rounded-xl font-bold hover:bg-red-600 hover:text-white transition">Sign Out from Portal</button>
+                </div>
+            </div>
+
+            <!-- Machine List (Within Site) -->
+            <div x-show="view === 'site-detail'" class="space-y-6">
+                 <button @click="view = 'sites'" class="text-blue-600 font-bold flex items-center hover:underline">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    Back to Sites
+                </button>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <template x-for="machine in getMachinesForSite(selectedSite?.id)" :key="machine.id">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition cursor-pointer" @click="openMachine(machine)">
+                            <div class="flex justify-between items-start mb-4">
+                                <div :class="'w-3 h-3 rounded-full status-' + machine.status"></div>
+                                <span :class="'text-[10px] font-black uppercase status-' + machine.status" x-text="machine.status"></span>
+                            </div>
+                            <h4 class="font-black text-gray-900 text-lg mb-1" x-text="machine.nickname || (machine.brand + ' ' + machine.model)"></h4>
+                            <p class="text-xs text-gray-400 font-bold uppercase tracking-widest" x-text="machine.type + ' - ' + machine.size"></p>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Global Log Dialog -->
+    <div x-show="logDialog.show" x-cloak class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl p-8 w-full max-w-md shadow-2xl scale-100 transition-transform">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-black text-gray-900">Add Service Log</h3>
+                <button @click="closeLogDialog()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="space-y-6">
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Action</label>
-                    <input type="text" x-model="logDialog.action" class="w-full p-2 border rounded" placeholder="What was done?">
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Action Performed</label>
+                    <input type="text" x-model="logDialog.action" class="w-full p-4 bg-gray-50 border-2 border-gray-100 rounded-2xl outline-none focus:border-blue-500 transition" placeholder="e.g. Belt Replacement">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Notes</label>
-                    <textarea x-model="logDialog.notes" class="w-full p-2 border rounded h-24" placeholder="Additional details..."></textarea>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Additional Notes</label>
+                    <textarea x-model="logDialog.notes" class="w-full p-4 bg-gray-50 border-2 border-gray-100 rounded-2xl outline-none focus:border-blue-500 transition h-32" placeholder="Describe the work done..."></textarea>
                 </div>
-                <div class="flex space-x-3 pt-2">
-                    <button @click="closeLogDialog()" class="flex-1 border p-2 rounded font-bold hover:bg-gray-50">Cancel</button>
-                    <button @click="addLog()" class="flex-1 bg-blue-600 text-white p-2 rounded font-bold hover:bg-blue-700">Add Log</button>
-                </div>
+                <button @click="addLog()" class="w-full bg-blue-600 text-white p-5 rounded-2xl font-black shadow-xl shadow-blue-100 hover:bg-blue-700 transition">Save Log Entry</button>
             </div>
         </div>
     </div>
@@ -119,17 +342,36 @@
                 token: localStorage.getItem('gh_token') || '',
                 tempToken: '',
                 user: null,
-                data: { laundromats: [], machines: [], logs: [] },
+                data: { laundromats: [], machines: [], logs: [], spareParts: [] },
                 loading: false,
                 isDirty: false,
                 sha: '',
+                view: 'dashboard',
+                selectedSite: null,
+                selectedMachine: null,
+                deviceName: localStorage.getItem('device_name') || 'Web Portal',
                 logDialog: { show: false, machine: null, action: '', notes: '' },
+                charts: { uptime: null, frequency: null },
 
                 async init() {
                     if (this.token) {
-                        await this.fetchUserInfo();
-                        await this.fetchData();
+                        if (await this.fetchUserInfo()) {
+                            await this.fetchData();
+                        } else {
+                            this.logout();
+                        }
                     }
+                    this.$watch('view', value => {
+                        if (value === 'analytics') {
+                            this.$nextTick(() => this.renderCharts());
+                        }
+                    });
+                },
+
+                getCurrentBreadcrumb() {
+                    if (this.view === 'site-detail') return 'Fleet / ' + this.selectedSite?.name;
+                    if (this.view === 'machine-detail') return 'Fleet / ' + this.selectedSite?.name + ' / ' + (this.selectedMachine?.nickname || this.selectedMachine?.model);
+                    return 'Management Console';
                 },
 
                 async login() {
@@ -138,7 +380,7 @@
                         localStorage.setItem('gh_token', this.token);
                         await this.fetchData();
                     } else {
-                        alert('Invalid token or network error.');
+                        alert('Invalid GitHub Token. Please check your permissions.');
                         this.token = '';
                     }
                 },
@@ -171,7 +413,6 @@
                         if (res.ok) {
                             const json = await res.json();
                             this.sha = json.sha;
-                            // Proper UTF-8 decoding
                             const decoded = decodeURIComponent(escape(window.atob(json.content.replace(/\s/g, ''))));
                             this.data = JSON.parse(decoded);
                             this.isDirty = false;
@@ -183,11 +424,34 @@
                 },
 
                 getMachinesForSite(siteId) {
-                    return this.data.machines.filter(m => m.laundromatId === siteId);
+                    return (this.data.machines || []).filter(m => m.laundromatId === siteId);
+                },
+
+                getMachineName(id) {
+                    const m = this.data.machines.find(m => m.id === id);
+                    return m ? (m.nickname || (m.brand + ' ' + m.model)) : 'Unknown Machine';
+                },
+
+                getLogsForMachine(machineId) {
+                    return (this.data.logs || []).filter(l => l.machineId === machineId).reverse();
                 },
 
                 markDirty() {
                     this.isDirty = true;
+                },
+
+                saveSettings() {
+                    localStorage.setItem('device_name', this.deviceName);
+                },
+
+                openSite(site) {
+                    this.selectedSite = site;
+                    this.view = 'site-detail';
+                },
+
+                openMachine(machine) {
+                    this.selectedMachine = machine;
+                    this.view = 'machine-detail';
                 },
 
                 openLogDialog(machine) {
@@ -216,11 +480,61 @@
                     this.closeLogDialog();
                 },
 
+                updateStock(part, delta) {
+                    part.stockQuantity = Math.max(0, part.stockQuantity + delta);
+                    this.markDirty();
+                },
+
+                formatDate(ts) {
+                    return new Date(ts).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+                },
+
+                renderCharts() {
+                    // Uptime Chart
+                    const statuses = this.data.machines.reduce((acc, m) => {
+                        acc[m.status] = (acc[m.status] || 0) + 1;
+                        return acc;
+                    }, {});
+
+                    if (this.charts.uptime) this.charts.uptime.destroy();
+                    this.charts.uptime = new Chart(document.getElementById('uptimeChart'), {
+                        type: 'pie',
+                        data: {
+                            labels: Object.keys(statuses),
+                            datasets: [{
+                                data: Object.values(statuses),
+                                backgroundColor: ['#2E7D32', '#EF6C00', '#B71C1C']
+                            }]
+                        }
+                    });
+
+                    // Frequency Chart
+                    const models = this.data.machines.reduce((acc, m) => {
+                        acc[m.model] = (acc[m.model] || 0) + this.getLogsForMachine(m.id).length;
+                        return acc;
+                    }, {});
+
+                    const sortedModels = Object.entries(models).sort((a,b) => b[1] - a[1]).slice(0, 5);
+
+                    if (this.charts.frequency) this.charts.frequency.destroy();
+                    this.charts.frequency = new Chart(document.getElementById('frequencyChart'), {
+                        type: 'bar',
+                        data: {
+                            labels: sortedModels.map(s => s[0]),
+                            datasets: [{
+                                label: 'Total Service Logs',
+                                data: sortedModels.map(s => s[1]),
+                                backgroundColor: '#1d4ed8'
+                            }]
+                        },
+                        options: { indexAxis: 'y' }
+                    });
+                },
+
                 async saveData() {
                     this.loading = true;
                     try {
                         const repo = "Laundromat-Backups";
-                        // Proper UTF-8 encoding
                         const jsonStr = JSON.stringify(this.data, null, 2);
                         const content = window.btoa(unescape(encodeURIComponent(jsonStr)));
 
@@ -231,7 +545,7 @@
                                 'Content-Type': 'application/json'
                             },
                             body: JSON.stringify({
-                                message: 'Web Portal Update',
+                                message: `Portal Update from ${this.deviceName}`,
                                 content: content,
                                 sha: this.sha
                             })
@@ -240,12 +554,12 @@
                             const json = await res.json();
                             this.sha = json.content.sha;
                             this.isDirty = false;
-                            alert('Data saved successfully!');
+                            alert('Data synchronized successfully!');
                         } else {
-                            alert('Save failed. Check if another update occurred.');
+                            alert('Conflict detected. Please refresh data first.');
                         }
                     } catch (e) {
-                        alert('Save failed: ' + e.message);
+                        alert('Sync failed: ' + e.message);
                     }
                     this.loading = false;
                 }
