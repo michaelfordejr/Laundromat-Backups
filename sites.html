@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sites - Laundromat Fleet Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <script src="portal.js"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .status-Working, .status-OPERATIONAL { color: #2E7D32; font-weight: bold; }
+        .status-Maintenance, .status-SERVICE_REQUIRED { color: #EF6C00; font-weight: bold; }
+        .status-Fault, .status-DOWN { color: #B71C1C; font-weight: bold; }
+        @media print { .no-print { display: none !important; } .print-only { display: block !important; } }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex" x-data="sitesApp()" x-init="init()">
+
+    <!-- Sidebar (no-print) -->
+    <aside class="w-64 bg-black text-gray-300 flex flex-col fixed h-full z-40 no-print">
+        <div class="p-6 border-b border-gray-800">
+            <h1 class="text-xl font-bold">Fleet Pro</h1>
+        </div>
+        <nav class="flex-1 p-4 space-y-2">
+            <a href="index.html" class="flex items-center p-3 rounded-lg hover:bg-gray-800 transition">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                Dashboard
+            </a>
+            <a href="sites.html" class="flex items-center p-3 rounded-lg bg-blue-600 text-white">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                Sites
+            </a>
+            <a href="inventory.html" class="flex items-center p-3 rounded-lg hover:bg-gray-800 transition">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                Inventory
+            </a>
+            <a href="analytics.html" class="flex items-center p-3 rounded-lg hover:bg-gray-800 transition">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 01-2 2h22a2 2 0 01-2-2v-10a2 2 0 00-2-2h-2a2 2 0 00-2 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                Analytics
+            </a>
+            <a href="team.html" class="flex items-center p-3 rounded-lg hover:bg-gray-800 transition">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                Team Hub
+            </a>
+        </nav>
+        <div class="p-4 border-t border-gray-800 no-print">
+            <button @click="logout()" class="w-full bg-red-900 hover:bg-red-800 p-2 rounded text-sm transition">Logout</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 ml-64 p-8 no-print">
+
+        <!-- Site List -->
+        <div x-show="view === 'list'" x-cloak class="max-w-6xl mx-auto">
+            <header class="flex justify-between items-center mb-10">
+                <div>
+                    <h2 class="text-3xl font-black text-gray-900">Manage Sites</h2>
+                    <p class="text-gray-500">Select a site to view its machine inventory</p>
+                </div>
+                <button @click="saveData()" :disabled="!isDirty" :class="isDirty ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-400'" class="px-6 py-2 rounded-xl font-bold shadow transition">
+                    Sync Changes
+                </button>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <template x-for="site in data.laundromats" :key="site.id">
+                    <div class="bg-white rounded-3xl shadow-sm border-2 border-transparent hover:border-blue-500 transition cursor-pointer group" @click="openSite(site)">
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-4">
+                                <h3 class="text-xl font-black text-gray-900" x-text="site.name"></h3>
+                                <button @click.stop="printQrSheet(site)" class="text-gray-300 hover:text-blue-500 p-1">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                                </button>
+                            </div>
+                            <p class="text-gray-400 text-xs font-bold uppercase mb-6" x-text="site.location"></p>
+                            <div class="flex items-center text-blue-600 text-xs font-black uppercase">
+                                View Machines
+                                <svg class="w-3 h-3 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- Machine Inventory (Drill Down) -->
+        <div x-show="view === 'inventory'" x-cloak class="max-w-6xl mx-auto">
+            <button @click="view = 'list'" class="text-blue-600 font-bold mb-6 flex items-center hover:underline">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                Back to Sites
+            </button>
+
+            <header class="mb-10">
+                <h2 class="text-3xl font-black text-gray-900" x-text="selectedSite?.name"></h2>
+                <p class="text-gray-500" x-text="selectedSite?.location"></p>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <template x-for="machine in getMachinesForSite(selectedSite?.id)" :key="machine.id">
+                    <div class="bg-white p-6 rounded-2xl border-2 border-gray-50 hover:border-blue-100 transition shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <span :class="'status-' + machine.status" class="text-[10px] font-black uppercase tracking-wider" x-text="machine.status"></span>
+                            <select x-model="machine.status" @change="markDirty()" class="text-[10px] border-none bg-gray-50 rounded p-1">
+                                <option value="OPERATIONAL">WORKING</option>
+                                <option value="SERVICE_REQUIRED">MAINTENANCE</option>
+                                <option value="DOWN">FAULT</option>
+                            </select>
+                        </div>
+                        <h4 class="font-black text-gray-900 text-lg mb-1" x-text="machine.nickname || (machine.brand + ' ' + machine.model)"></h4>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-6" x-text="machine.type + ' - ' + machine.size"></p>
+
+                        <div class="flex space-x-2">
+                             <button @click="openLogDialog(machine)" class="flex-1 bg-gray-900 text-white text-[10px] font-black py-2 rounded-lg uppercase">+ Log Service</button>
+                             <button @click="webTroubleshoot(machine)" class="flex-1 border text-blue-600 text-[10px] font-black py-2 rounded-lg uppercase">Troubleshoot</button>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </main>
+
+    <!-- Print View -->
+    <div x-show="isPrinting" class="hidden print-only p-8">
+        <h1 class="text-2xl font-black mb-8 border-b pb-4" x-text="'QR Labels: ' + printingSite?.name"></h1>
+        <div class="grid grid-cols-3 gap-8">
+            <template x-for="machine in getMachinesForSite(printingSite?.id)" :key="machine.id">
+                <div class="border p-4 text-center rounded-xl">
+                    <canvas :id="'qr-' + machine.id" class="mx-auto mb-2"></canvas>
+                    <p class="font-bold text-xs" x-text="machine.nickname || machine.model"></p>
+                    <p class="text-[8px] text-gray-500 uppercase" x-text="machine.brand"></p>
+                </div>
+            </template>
+        </div>
+    </div>
+
+    <!-- Log Modal -->
+    <div x-show="logModal.show" x-cloak class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 backdrop-blur-sm no-print">
+        <div class="bg-white rounded-3xl p-8 w-full max-w-md">
+            <h3 class="text-xl font-black mb-6">Add Maintenance Log</h3>
+            <div class="space-y-4">
+                <input type="text" x-model="logModal.action" placeholder="Action Performed" class="w-full p-3 border rounded-xl">
+                <textarea x-model="logModal.notes" placeholder="Notes" class="w-full p-3 border rounded-xl h-24"></textarea>
+                <button @click="addLog()" class="w-full bg-blue-600 text-white p-4 rounded-xl font-black">Save Log</button>
+                <button @click="logModal.show = false" class="w-full text-gray-400 font-bold">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function sitesApp() {
+            const shared = getPortalApp();
+            return {
+                ...shared,
+                view: 'list',
+                selectedSite: null,
+                isPrinting: false,
+                printingSite: null,
+                logModal: { show: false, machine: null, action: '', notes: '' },
+
+                async init() {
+                    await this.initShared();
+                },
+
+                openSite(site) {
+                    this.selectedSite = site;
+                    this.view = 'inventory';
+                },
+
+                getMachinesForSite(id) {
+                    return this.data.machines.filter(m => m.laundromatId === id);
+                },
+
+                markDirty() { this.isDirty = true; },
+
+                openLogDialog(machine) {
+                    this.logModal.machine = machine;
+                    this.logModal.show = true;
+                },
+
+                addLog() {
+                    if (!this.logModal.action) return;
+                    this.data.logs.push({
+                        id: Date.now(),
+                        machineId: this.logModal.machine.id,
+                        timestamp: Date.now(),
+                        action: this.logModal.action,
+                        notes: this.logModal.notes + "\n\n(Logged via: " + this.deviceName + ")"
+                    });
+                    this.isDirty = true;
+                    this.logModal.show = false;
+                },
+
+                printQrSheet(site) {
+                    this.printingSite = site;
+                    this.isPrinting = true;
+                    this.$nextTick(() => {
+                        const machines = this.getMachinesForSite(site.id);
+                        machines.forEach(m => {
+                            QRCode.toCanvas(document.getElementById('qr-' + m.id), `laundromat:machine:${m.id}`, { width: 100, margin: 1 });
+                        });
+                        setTimeout(() => { window.print(); this.isPrinting = false; }, 500);
+                    });
+                },
+
+                webTroubleshoot(m) {
+                    const query = `site:manualslib.com OR site:fix.com ${m.brand} ${m.model} troubleshoot error codes`;
+                    window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
