@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laundromat Management Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .status-Working { color: #2E7D32; }
+        .status-Maintenance { color: #EF6C00; }
+        .status-Fault { color: #B71C1C; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen" x-data="portalApp()" x-init="init()">
+    <nav class="bg-black text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold flex items-center">
+                <span class="text-blue-500 mr-2">N|M</span> Fleet Portal
+            </h1>
+            <div class="flex items-center space-x-4">
+                <template x-if="user">
+                    <span class="text-sm text-gray-400" x-text="'Logged in as ' + user.login"></span>
+                </template>
+                <button @click="logout()" x-show="token" class="text-sm bg-red-900 px-3 py-1 rounded">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-6">
+        <!-- Auth View -->
+        <div x-show="!token" x-cloak class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-md mt-12">
+            <h2 class="text-2xl font-bold mb-6 text-center">GitHub Access Required</h2>
+            <p class="text-gray-600 mb-6 text-sm">Enter a GitHub Personal Access Token (PAT) with <b>'repo'</b> scope to manage your fleet.</p>
+            <input type="password" x-model="tempToken" placeholder="GitHub Token" class="w-full p-3 border rounded mb-4">
+            <button @click="login()" class="w-full bg-blue-600 text-white p-3 rounded font-bold hover:bg-blue-700 transition">Connect</button>
+            <div class="mt-6 text-xs text-gray-500">
+                <p>Don't have a token? <a href="https://github.com/settings/tokens/new?scopes=repo&description=LaundromatPortal" target="_blank" class="text-blue-500 underline">Generate one here</a></p>
+            </div>
+        </div>
+
+        <!-- Dashboard View -->
+        <div x-show="token" x-cloak>
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-extrabold text-gray-800">Fleet Overview</h2>
+                <div class="flex space-x-2">
+                    <button @click="fetchData()" class="bg-white border p-2 rounded shadow-sm hover:bg-gray-50">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    </button>
+                    <button @click="saveData()" :disabled="!isDirty" :class="isDirty ? 'bg-green-600 text-white' : 'bg-gray-300 text-gray-500'" class="px-6 py-2 rounded font-bold shadow transition">
+                        Save Changes
+                    </button>
+                </div>
+            </div>
+
+            <template x-if="loading">
+                <div class="flex justify-center p-12">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                </div>
+            </template>
+
+            <!-- Sites -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" x-show="!loading">
+                <template x-for="site in data.laundromats" :key="site.id">
+                    <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
+                        <div class="p-4 border-b bg-gray-50">
+                            <h3 class="font-bold text-lg" x-text="site.name"></h3>
+                            <p class="text-xs text-gray-500" x-text="site.location"></p>
+                        </div>
+                        <div class="p-4 space-y-3">
+                            <template x-for="machine in getMachinesForSite(site.id)" :key="machine.id">
+                                <div class="p-3 border rounded-lg hover:border-blue-300 transition">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <div>
+                                            <span class="font-semibold block text-sm" x-text="machine.nickname || (machine.brand + ' ' + machine.model)"></span>
+                                            <span class="text-xs text-gray-400" x-text="machine.type + ' - ' + machine.size"></span>
+                                        </div>
+                                        <select x-model="machine.status" @change="markDirty()" :class="'text-xs font-bold px-2 py-1 rounded status-' + machine.status">
+                                            <option value="OPERATIONAL">Working</option>
+                                            <option value="SERVICE_REQUIRED">Maintenance</option>
+                                            <option value="DOWN">Fault</option>
+                                        </select>
+                                    </div>
+                                    <button @click="openLogDialog(machine)" class="text-[10px] text-blue-600 font-bold uppercase tracking-wider hover:underline">+ Add Log</button>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+    <!-- Log Dialog -->
+    <div x-show="logDialog.show" x-cloak class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl">
+            <h3 class="text-xl font-bold mb-4" x-text="'Log Maintenance for ' + (logDialog.machine?.nickname || logDialog.machine?.model)"></h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Action</label>
+                    <input type="text" x-model="logDialog.action" class="w-full p-2 border rounded" placeholder="What was done?">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Notes</label>
+                    <textarea x-model="logDialog.notes" class="w-full p-2 border rounded h-24" placeholder="Additional details..."></textarea>
+                </div>
+                <div class="flex space-x-3 pt-2">
+                    <button @click="closeLogDialog()" class="flex-1 border p-2 rounded font-bold hover:bg-gray-50">Cancel</button>
+                    <button @click="addLog()" class="flex-1 bg-blue-600 text-white p-2 rounded font-bold hover:bg-blue-700">Add Log</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function portalApp() {
+            return {
+                token: localStorage.getItem('gh_token') || '',
+                tempToken: '',
+                user: null,
+                data: { laundromats: [], machines: [], logs: [] },
+                loading: false,
+                isDirty: false,
+                sha: '',
+                logDialog: { show: false, machine: null, action: '', notes: '' },
+
+                async init() {
+                    if (this.token) {
+                        await this.fetchUserInfo();
+                        await this.fetchData();
+                    }
+                },
+
+                async login() {
+                    this.token = this.tempToken;
+                    if (await this.fetchUserInfo()) {
+                        localStorage.setItem('gh_token', this.token);
+                        await this.fetchData();
+                    } else {
+                        alert('Invalid token or network error.');
+                        this.token = '';
+                    }
+                },
+
+                logout() {
+                    localStorage.removeItem('gh_token');
+                    location.reload();
+                },
+
+                async fetchUserInfo() {
+                    try {
+                        const res = await fetch('https://api.github.com/user', {
+                            headers: { 'Authorization': `token ${this.token}` }
+                        });
+                        if (res.ok) {
+                            this.user = await res.json();
+                            return true;
+                        }
+                    } catch (e) {}
+                    return false;
+                },
+
+                async fetchData() {
+                    this.loading = true;
+                    try {
+                        const repo = "Laundromat-Backups";
+                        const res = await fetch(`https://api.github.com/repos/${this.user.login}/${repo}/contents/data.json`, {
+                            headers: { 'Authorization': `token ${this.token}`, 'Accept': 'application/vnd.github.v3+json' }
+                        });
+                        if (res.ok) {
+                            const json = await res.json();
+                            this.sha = json.sha;
+                            // Proper UTF-8 decoding
+                            const decoded = decodeURIComponent(escape(window.atob(json.content.replace(/\s/g, ''))));
+                            this.data = JSON.parse(decoded);
+                            this.isDirty = false;
+                        }
+                    } catch (e) {
+                        console.error(e);
+                    }
+                    this.loading = false;
+                },
+
+                getMachinesForSite(siteId) {
+                    return this.data.machines.filter(m => m.laundromatId === siteId);
+                },
+
+                markDirty() {
+                    this.isDirty = true;
+                },
+
+                openLogDialog(machine) {
+                    this.logDialog.machine = machine;
+                    this.logDialog.show = true;
+                },
+
+                closeLogDialog() {
+                    this.logDialog.show = false;
+                    this.logDialog.machine = null;
+                    this.logDialog.action = '';
+                    this.logDialog.notes = '';
+                },
+
+                addLog() {
+                    if (!this.logDialog.action) return;
+                    const newLog = {
+                        id: Date.now(),
+                        machineId: this.logDialog.machine.id,
+                        timestamp: Date.now(),
+                        action: this.logDialog.action,
+                        notes: this.logDialog.notes
+                    };
+                    this.data.logs.push(newLog);
+                    this.markDirty();
+                    this.closeLogDialog();
+                },
+
+                async saveData() {
+                    this.loading = true;
+                    try {
+                        const repo = "Laundromat-Backups";
+                        // Proper UTF-8 encoding
+                        const jsonStr = JSON.stringify(this.data, null, 2);
+                        const content = window.btoa(unescape(encodeURIComponent(jsonStr)));
+
+                        const res = await fetch(`https://api.github.com/repos/${this.user.login}/${repo}/contents/data.json`, {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': `token ${this.token}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                message: 'Web Portal Update',
+                                content: content,
+                                sha: this.sha
+                            })
+                        });
+                        if (res.ok) {
+                            const json = await res.json();
+                            this.sha = json.content.sha;
+                            this.isDirty = false;
+                            alert('Data saved successfully!');
+                        } else {
+                            alert('Save failed. Check if another update occurred.');
+                        }
+                    } catch (e) {
+                        alert('Save failed: ' + e.message);
+                    }
+                    this.loading = false;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
