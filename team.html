@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Hub - Laundromat Fleet Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <script src="portal.js"></script>
+    <style>[x-cloak] { display: none !important; }</style>
+</head>
+<body class="bg-gray-100 min-h-screen flex" x-data="teamApp()" x-init="init()">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-black text-gray-300 flex flex-col fixed h-full z-40">
+        <div class="p-6 border-b border-gray-800">
+            <h1 class="text-xl font-bold">Fleet Pro</h1>
+        </div>
+        <nav class="flex-1 p-4 space-y-2">
+            <a href="index.html" class="flex items-center p-3 rounded-lg hover:bg-gray-800 transition">
+                Dashboard
+            </a>
+            <a href="sites.html" class="flex items-center p-3 rounded-lg hover:bg-gray-800 transition">
+                Sites
+            </a>
+            <a href="inventory.html" class="flex items-center p-3 rounded-lg hover:bg-gray-800 transition">
+                Inventory
+            </a>
+            <a href="analytics.html" class="flex items-center p-3 rounded-lg hover:bg-gray-800 transition">
+                Analytics
+            </a>
+            <a href="team.html" class="flex items-center p-3 rounded-lg bg-blue-600 text-white">
+                Team Hub
+            </a>
+        </nav>
+        <div class="p-4 border-t border-gray-800">
+            <button @click="logout()" class="w-full bg-red-900 p-2 rounded text-sm transition">Logout</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 ml-64 p-8">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-black text-gray-900 mb-10">Team Management</h2>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Invite -->
+                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-10 flex flex-col items-center text-center">
+                    <h3 class="text-2xl font-black text-gray-900 mb-2">Onboard Technician</h3>
+                    <p class="text-gray-500 text-sm mb-10">Have the technician scan this code to link their device.</p>
+                    <div class="bg-white p-4 rounded-3xl border-4 border-gray-50 mb-10">
+                        <canvas id="inviteQrCanvas" class="mx-auto"></canvas>
+                    </div>
+                    <button @click="copyJoinUrl()" class="w-full bg-blue-600 text-white p-4 rounded-xl font-black shadow-lg hover:bg-blue-700 transition">Copy Join Link</button>
+                </div>
+
+                <!-- Active Devices -->
+                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-6 border-b bg-gray-50 font-black text-gray-800">Active Technicians</div>
+                    <div class="divide-y max-h-[500px] overflow-y-auto">
+                        <template x-for="tech in contributors" :key="tech.id">
+                            <div class="p-4 hover:bg-gray-50 flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-gray-900 text-white flex items-center justify-center font-bold mr-4" x-text="tech.name[0]"></div>
+                                <div class="flex-1">
+                                    <p class="font-bold text-gray-900" x-text="tech.name"></p>
+                                    <p class="text-xs text-gray-400" x-text="'Last active: ' + formatDate(tech.date)"></p>
+                                </div>
+                                <div class="bg-green-100 text-green-700 px-2 py-1 rounded text-[10px] font-black uppercase">Technician</div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function teamApp() {
+            const shared = getPortalApp();
+            return {
+                ...shared,
+                contributors: [],
+                async init() {
+                    await this.initShared();
+                    this.renderInviteQr();
+                    this.fetchContributors();
+                },
+                renderInviteQr() {
+                    const data = `laundromatma://join?owner=${this.user.login}&token=${this.token}`;
+                    QRCode.toCanvas(document.getElementById('inviteQrCanvas'), data, { width: 200, margin: 2 });
+                },
+                async fetchContributors() {
+                    try {
+                        const res = await fetch(`https://api.github.com/repos/${this.user.login}/${REPO_NAME}/commits?path=data.json`, {
+                            headers: { 'Authorization': `token ${this.token}` }
+                        });
+                        if (res.ok) {
+                            const commits = await res.json();
+                            const devices = new Map();
+                            commits.forEach(c => {
+                                const msg = c.commit.message;
+                                if (msg.includes('Portal Update from ')) {
+                                    const name = msg.split('Portal Update from ')[1].split(' - ')[0];
+                                    if (!devices.has(name)) devices.set(name, { id: c.sha, name: name, date: c.commit.author.date });
+                                }
+                            });
+                            this.contributors = Array.from(devices.values());
+                        }
+                    } catch (e) {}
+                },
+                copyJoinUrl() {
+                    const data = `laundromatma://join?owner=${this.user.login}&token=${this.token}`;
+                    navigator.clipboard.writeText(data);
+                    alert('Join link copied!');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
