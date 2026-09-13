@@ -38,6 +38,10 @@
             <a href="team.html" class="flex items-center p-3 rounded-lg bg-blue-600 text-white">
                 Team Hub
             </a>
+            <a href="admin.html" class="flex items-center p-3 rounded-lg hover:bg-gray-800 transition" :class="isAdminUnlocked ? 'text-green-400 font-bold' : ''">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                Admin
+            </a>
         </nav>
         <div class="p-4 border-t border-gray-800">
             <button @click="logout()" class="w-full bg-red-900 p-2 rounded text-sm transition">Logout</button>
@@ -51,8 +55,13 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <!-- Dispatch Work Order -->
-                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-10">
-                    <h3 class="text-2xl font-black text-gray-900 mb-6">Dispatch Work Order</h3>
+                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-10" :class="!isAdminUnlocked ? 'opacity-50 grayscale pointer-events-none' : ''">
+                    <div class="flex justify-between items-center mb-6">
+                         <h3 class="text-2xl font-black text-gray-900">Dispatch Work Order</h3>
+                         <template x-if="!isAdminUnlocked">
+                             <span class="text-[10px] bg-red-100 text-red-600 px-2 py-1 rounded font-black">ADMIN LOCKED</span>
+                         </template>
+                    </div>
                     <div class="space-y-4">
                         <div>
                             <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Target Machine</label>
