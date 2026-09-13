@@ -6,12 +6,15 @@ function getPortalApp() {
         token: localStorage.getItem('gh_token') || '',
         tempToken: '',
         user: null,
-        data: { laundromats: [], machines: [], logs: [], spareParts: [], scheduledMaintenance: [], documents: [] },
+        data: { laundromats: [], machines: [], logs: [], spareParts: [], scheduledMaintenance: [], documents: [], partUsages: [] },
         reports: [],
         loading: false,
         isDirty: false,
         sha: '',
         deviceName: localStorage.getItem('device_name') || 'Office Portal',
+        isAdminUnlocked: sessionStorage.getItem('admin_unlocked') === 'true',
+        showAddMachineModal: false,
+        newMachine: { brand: '', model: '', serialNumber: '', type: 'WASHER', size: '' },
         searchQuery: '',
         searchResults: [],
 
@@ -23,6 +26,20 @@ function getPortalApp() {
                     this.logout();
                 }
             }
+        },
+
+        unlockAdmin(code) {
+            if (code === '5494') {
+                this.isAdminUnlocked = true;
+                sessionStorage.setItem('admin_unlocked', 'true');
+                return true;
+            }
+            return false;
+        },
+
+        lockAdmin() {
+            this.isAdminUnlocked = false;
+            sessionStorage.removeItem('admin_unlocked');
         },
 
         // Global Search
