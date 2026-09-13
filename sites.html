@@ -52,6 +52,10 @@
                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                 Team Hub
             </a>
+            <a href="admin.html" class="flex items-center p-3 rounded-lg hover:bg-gray-800 transition" :class="isAdminUnlocked ? 'text-green-400 font-bold' : ''">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                Admin
+            </a>
         </nav>
         <div class="p-4 border-t border-gray-800 no-print">
             <button @click="logout()" class="w-full bg-red-900 hover:bg-red-800 p-2 rounded text-sm transition">Logout</button>
@@ -72,7 +76,7 @@
                     <button @click="toggleMap()" class="bg-white border-2 px-4 py-2 rounded-xl font-bold hover:bg-gray-50 transition shadow-sm">
                         <span x-text="showMap ? 'Show List' : 'Show Fleet Map'"></span>
                     </button>
-                    <button @click="saveData()" :disabled="!isDirty" :class="isDirty ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-400'" class="px-6 py-2 rounded-xl font-bold shadow transition">
+                    <button @click="saveData()" x-show="isAdminUnlocked" :disabled="!isDirty" :class="isDirty ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-400'" class="px-6 py-2 rounded-xl font-bold shadow transition">
                         Sync Changes
                     </button>
                 </div>
@@ -109,9 +113,14 @@
                 Back to Sites
             </button>
 
-            <header class="mb-10">
-                <h2 class="text-3xl font-black text-gray-900" x-text="selectedSite?.name"></h2>
-                <p class="text-gray-500" x-text="selectedSite?.location"></p>
+            <header class="mb-10 flex justify-between items-start">
+                <div>
+                    <h2 class="text-3xl font-black text-gray-900" x-text="selectedSite?.name"></h2>
+                    <p class="text-gray-500" x-text="selectedSite?.location"></p>
+                </div>
+                <button @click="showAddMachineModal = true" x-show="isAdminUnlocked" class="bg-blue-600 text-white px-6 py-3 rounded-2xl font-black shadow-lg hover:bg-blue-700 transition">
+                    + Add Machine
+                </button>
             </header>
 
             <!-- Washers Section -->
@@ -125,25 +134,25 @@
                         <div class="bg-white p-6 rounded-2xl border-2 transition shadow-sm relative group"
                              :class="isSelected(machine.id) ? 'border-blue-500 ring-2 ring-blue-200' : 'border-gray-50 hover:border-blue-100'">
 
-                            <!-- Selection Checkbox -->
-                            <div class="absolute top-4 left-4 z-10">
+                            <!-- Selection Checkbox (Unlocked Only) -->
+                            <div class="absolute top-4 left-4 z-10" x-show="isAdminUnlocked">
                                 <input type="checkbox" :checked="isSelected(machine.id)" @change="toggleSelection(machine.id)"
                                        class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
                             </div>
 
-                            <div class="flex justify-between items-start mb-4 ml-8">
+                            <div class="flex justify-between items-start mb-4" :class="isAdminUnlocked ? 'ml-8' : ''">
                                 <span :class="'status-' + machine.status" class="text-[10px] font-black uppercase tracking-wider" x-text="machine.status"></span>
-                                <select x-model="machine.status" @change="markDirty()" class="text-[10px] border-none bg-gray-50 rounded p-1">
+                                <select x-model="machine.status" @change="markDirty()" :disabled="!isAdminUnlocked" class="text-[10px] border-none bg-gray-50 rounded p-1 disabled:opacity-50">
                                     <option value="OPERATIONAL">WORKING</option>
                                     <option value="SERVICE_REQUIRED">MAINTENANCE</option>
                                     <option value="DOWN">FAULT</option>
                                 </select>
                             </div>
-                            <h4 class="font-black text-gray-900 text-lg mb-1 ml-8" x-text="machine.nickname || (machine.brand + ' ' + machine.model)"></h4>
-                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-6 ml-8" x-text="machine.size"></p>
+                            <h4 class="font-black text-gray-900 text-lg mb-1" :class="isAdminUnlocked ? 'ml-8' : ''" x-text="machine.nickname || (machine.brand + ' ' + machine.model)"></h4>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-6" :class="isAdminUnlocked ? 'ml-8' : ''" x-text="machine.size"></p>
 
-                            <div class="flex space-x-2 ml-8">
-                                 <button @click="openLogDialog(machine)" class="flex-1 bg-gray-900 text-white text-[10px] font-black py-2 rounded-lg uppercase">+ Log Service</button>
+                            <div class="flex space-x-2" :class="isAdminUnlocked ? 'ml-8' : ''">
+                                 <button @click="openLogDialog(machine)" :disabled="!isAdminUnlocked" class="flex-1 bg-gray-900 text-white text-[10px] font-black py-2 rounded-lg uppercase disabled:opacity-50">+ Log Service</button>
                                  <button @click="webTroubleshoot(machine)" class="flex-1 border text-blue-600 text-[10px] font-black py-2 rounded-lg uppercase">Troubleshoot</button>
                             </div>
                         </div>
@@ -165,25 +174,25 @@
                         <div class="bg-white p-6 rounded-2xl border-2 transition shadow-sm relative group"
                              :class="isSelected(machine.id) ? 'border-blue-500 ring-2 ring-blue-200' : 'border-gray-50 hover:border-blue-100'">
 
-                            <!-- Selection Checkbox -->
-                            <div class="absolute top-4 left-4 z-10">
+                            <!-- Selection Checkbox (Unlocked Only) -->
+                            <div class="absolute top-4 left-4 z-10" x-show="isAdminUnlocked">
                                 <input type="checkbox" :checked="isSelected(machine.id)" @change="toggleSelection(machine.id)"
                                        class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
                             </div>
 
-                            <div class="flex justify-between items-start mb-4 ml-8">
+                            <div class="flex justify-between items-start mb-4" :class="isAdminUnlocked ? 'ml-8' : ''">
                                 <span :class="'status-' + machine.status" class="text-[10px] font-black uppercase tracking-wider" x-text="machine.status"></span>
-                                <select x-model="machine.status" @change="markDirty()" class="text-[10px] border-none bg-gray-50 rounded p-1">
+                                <select x-model="machine.status" @change="markDirty()" :disabled="!isAdminUnlocked" class="text-[10px] border-none bg-gray-50 rounded p-1 disabled:opacity-50">
                                     <option value="OPERATIONAL">WORKING</option>
                                     <option value="SERVICE_REQUIRED">MAINTENANCE</option>
                                     <option value="DOWN">FAULT</option>
                                 </select>
                             </div>
-                            <h4 class="font-black text-gray-900 text-lg mb-1 ml-8" x-text="machine.nickname || (machine.brand + ' ' + machine.model)"></h4>
-                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-6 ml-8" x-text="machine.size"></p>
+                            <h4 class="font-black text-gray-900 text-lg mb-1" :class="isAdminUnlocked ? 'ml-8' : ''" x-text="machine.nickname || (machine.brand + ' ' + machine.model)"></h4>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-6" :class="isAdminUnlocked ? 'ml-8' : ''" x-text="machine.size"></p>
 
-                            <div class="flex space-x-2 ml-8">
-                                 <button @click="openLogDialog(machine)" class="flex-1 bg-gray-900 text-white text-[10px] font-black py-2 rounded-lg uppercase">+ Log Service</button>
+                            <div class="flex space-x-2" :class="isAdminUnlocked ? 'ml-8' : ''">
+                                 <button @click="openLogDialog(machine)" :disabled="!isAdminUnlocked" class="flex-1 bg-gray-900 text-white text-[10px] font-black py-2 rounded-lg uppercase disabled:opacity-50">+ Log Service</button>
                                  <button @click="webTroubleshoot(machine)" class="flex-1 border text-blue-600 text-[10px] font-black py-2 rounded-lg uppercase">Troubleshoot</button>
                             </div>
                         </div>
@@ -249,6 +258,44 @@
         </div>
     </div>
 
+    <!-- Add Machine Modal -->
+    <div x-show="showAddMachineModal" x-cloak class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-[70] backdrop-blur-sm no-print">
+        <div class="bg-white rounded-[40px] p-10 w-full max-w-lg shadow-2xl" @click.away="showAddMachineModal = false">
+            <h3 class="text-2xl font-black mb-6 text-gray-900">Add New Machine</h3>
+            <div class="grid grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Brand</label>
+                    <input type="text" x-model="newMachine.brand" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold focus:border-blue-500 outline-none transition" placeholder="e.g. Speed Queen">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Model</label>
+                    <input type="text" x-model="newMachine.model" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold focus:border-blue-500 outline-none transition" placeholder="e.g. TC5">
+                </div>
+            </div>
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Serial Number</label>
+                    <input type="text" x-model="newMachine.serialNumber" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold focus:border-blue-500 outline-none transition" placeholder="SN12345678">
+                </div>
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Type</label>
+                        <select x-model="newMachine.type" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold focus:border-blue-500 outline-none transition">
+                            <option value="WASHER">Washer</option>
+                            <option value="DRYER">Dryer</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Capacity (Size)</label>
+                        <input type="text" x-model="newMachine.size" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold focus:border-blue-500 outline-none transition" placeholder="e.g. 50lb">
+                    </div>
+                </div>
+                <button @click="addMachine()" class="w-full bg-blue-600 text-white p-5 rounded-2xl font-black shadow-lg hover:bg-blue-700 transition active:scale-95">Create Asset</button>
+                <button @click="showAddMachineModal = false" class="w-full text-gray-400 font-bold hover:text-gray-600 transition">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Print View -->
     <div x-show="isPrinting" class="hidden print-only p-8">
         <h1 class="text-2xl font-black mb-8 border-b pb-4" x-text="'QR Labels: ' + printingSite?.name"></h1>
@@ -308,6 +355,29 @@
 
                 async init() {
                     await this.initShared();
+                },
+
+                addMachine() {
+                    if (!this.newMachine.brand || !this.newMachine.model) return alert('Brand and Model are required.');
+
+                    const machine = {
+                        id: Date.now(),
+                        laundromatId: this.selectedSite.id,
+                        brand: this.newMachine.brand,
+                        model: this.newMachine.model,
+                        serialNumber: this.newMachine.serialNumber,
+                        type: this.newMachine.type,
+                        size: this.newMachine.size,
+                        status: 'OPERATIONAL',
+                        lastStatusChangeTimestamp: Date.now(),
+                        position: this.getMachinesForSite(this.selectedSite.id).length
+                    };
+
+                    this.data.machines.push(machine);
+                    this.isDirty = true;
+                    this.showAddMachineModal = false;
+                    this.newMachine = { brand: '', model: '', serialNumber: '', type: 'WASHER', size: '' };
+                    alert('Machine added locally. Click Sync Changes to save to cloud.');
                 },
 
                 toggleMap() {
