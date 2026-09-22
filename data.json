@@ -212,6 +212,13 @@
       "machineId": 10,
       "notes": "cabling infrastructure is present for the balancing sensor but not applicable to the hard mount machines. \n\n(Logged via: Forde33)",
       "timestamp": 1790082297973
+    },
+    {
+      "action": "door lock",
+      "id": 28,
+      "machineId": 71,
+      "notes": "machine operational at all ends except at the completion of the wash cycle. the door does not unlock. \n\n(Logged via: Forde33)",
+      "timestamp": 1790115203597
     }
   ],
   "machines": [
@@ -1125,14 +1132,14 @@
       "brand": "Huebsch",
       "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dHC40BC2",
       "id": 71,
-      "lastStatusChangeTimestamp": 1789080088010,
+      "lastStatusChangeTimestamp": 1790115197997,
       "laundromatId": 2,
       "model": "HC40BC2",
       "nickname": "31 Huebsch HC40BC2",
       "position": 29,
       "serialNumber": "3020454374",
       "size": "40 lb",
-      "status": "OPERATIONAL",
+      "status": "SERVICE_REQUIRED",
       "type": "WASHER"
     },
     {
