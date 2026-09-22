@@ -205,6 +205,13 @@
       "machineId": 10,
       "notes": "Error E F5",
       "timestamp": 1789939648455
+    },
+    {
+      "action": "EF5",
+      "id": 27,
+      "machineId": 10,
+      "notes": "cabling infrastructure is present for the balancing sensor but not applicable to the hard mount machines. \n\n(Logged via: Forde33)",
+      "timestamp": 1790082297973
     }
   ],
   "machines": [
@@ -310,14 +317,14 @@
       "brand": "Speed Queen",
       "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCN030LC2",
       "id": 10,
-      "lastStatusChangeTimestamp": 1789939648437,
+      "lastStatusChangeTimestamp": 1790080082947,
       "laundromatId": 2,
       "model": "SCN030LC2",
       "nickname": "09 Speed Queen SCN030LC2",
       "position": 7,
       "serialNumber": "0908009011",
       "size": "30 lb",
-      "status": "DOWN",
+      "status": "OPERATIONAL",
       "type": "WASHER"
     },
     {
