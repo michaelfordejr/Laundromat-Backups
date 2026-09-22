@@ -1,5 +1,4 @@
 {
-  "adminCode": "9035",
   "documents": [
     {
       "id": 1,
@@ -13,16 +12,22 @@
   ],
   "laundromats": [
     {
-      "colorRes": 17170445,
+      "colorRes": 2131100620,
       "id": 2,
       "location": "Lat: 21.780729464502443, Lng: -72.20209646970034",
       "name": "Pablo\u0027s Highway"
     },
     {
-      "colorRes": 17170445,
+      "colorRes": 2131100624,
       "id": 3,
       "location": "Lat: 21.796658030001442, Lng: -72.27160591632128",
       "name": "Pablo\u0027s BlueHills"
+    },
+    {
+      "colorRes": 2131100623,
+      "id": 4,
+      "location": "123456",
+      "name": "test"
     }
   ],
   "logs": [
@@ -130,6 +135,76 @@
       "machineId": 29,
       "notes": "Error ed02, drive inverter faulty",
       "timestamp": 1789062084223
+    },
+    {
+      "action": "General Cleaning",
+      "id": 17,
+      "machineId": 37,
+      "notes": "Routine cleaning performed.\n\n(Logged via: Forde33)",
+      "timestamp": 1789075494331
+    },
+    {
+      "action": "General Cleaning",
+      "id": 18,
+      "machineId": 38,
+      "notes": "Routine cleaning performed.\n\n(Logged via: Forde33)",
+      "timestamp": 1789075494332
+    },
+    {
+      "action": "General Cleaning",
+      "id": 19,
+      "machineId": 39,
+      "notes": "Routine cleaning performed.\n\n(Logged via: Forde33)",
+      "timestamp": 1789075494333
+    },
+    {
+      "action": "General Cleaning",
+      "id": 20,
+      "machineId": 40,
+      "notes": "Routine cleaning performed.\n\n(Logged via: Forde33)",
+      "timestamp": 1789075494333
+    },
+    {
+      "action": "General Cleaning",
+      "id": 21,
+      "machineId": 41,
+      "notes": "Routine cleaning performed.\n\n(Logged via: Forde33)",
+      "timestamp": 1789075494334
+    },
+    {
+      "action": "General Cleaning",
+      "id": 22,
+      "machineId": 42,
+      "notes": "Routine cleaning performed.\n\n(Logged via: Forde33)",
+      "timestamp": 1789075494334
+    },
+    {
+      "action": "General Cleaning",
+      "id": 23,
+      "machineId": 43,
+      "notes": "Routine cleaning performed.\n\n(Logged via: Forde33)",
+      "timestamp": 1789075494335
+    },
+    {
+      "action": "Maintenance",
+      "id": 24,
+      "machineId": 6,
+      "notes": "adjusted the door lock stabilizer screw to avoid the lock pin from jamming the lock bar. \n\n(Logged via: Forde33)",
+      "timestamp": 1789395787089
+    },
+    {
+      "action": "Completed: Water Inlet Valve Check",
+      "id": 25,
+      "machineId": 60,
+      "notes": "Scheduled maintenance completed.\n\n(Logged via: Forde33)",
+      "timestamp": 1789512478905
+    },
+    {
+      "action": "Status Change: DOWN",
+      "id": 26,
+      "machineId": 10,
+      "notes": "Error E F5",
+      "timestamp": 1789939648455
     }
   ],
   "machines": [
@@ -169,7 +244,7 @@
       "laundromatId": 2,
       "model": "SCN020WCV",
       "nickname": "04 Speed Queen SCN020WCV",
-      "position": 3,
+      "position": 2,
       "serialNumber": "1711060888",
       "size": "20 lb",
       "status": "OPERATIONAL",
@@ -183,7 +258,7 @@
       "laundromatId": 2,
       "model": "HC20ACV",
       "nickname": "05 Huebsch HC20ACV",
-      "position": 4,
+      "position": 3,
       "serialNumber": "060015110",
       "size": "20 lb",
       "status": "OPERATIONAL",
@@ -197,7 +272,7 @@
       "laundromatId": 2,
       "model": "HC20ACV",
       "nickname": "06 Huebsch HC20ACV",
-      "position": 5,
+      "position": 4,
       "serialNumber": "060015112",
       "size": "20 lb",
       "status": "OPERATIONAL",
@@ -211,7 +286,7 @@
       "laundromatId": 2,
       "model": "HC20ACV",
       "nickname": "07 Huebsch HC20ACV",
-      "position": 6,
+      "position": 5,
       "serialNumber": "060015109",
       "size": "20 lb",
       "status": "OPERATIONAL",
@@ -225,7 +300,7 @@
       "laundromatId": 2,
       "model": "SCN030LC2",
       "nickname": "08 Speed Queen SCN030LC2",
-      "position": 7,
+      "position": 6,
       "serialNumber": "0908009012",
       "size": "30 lb",
       "status": "OPERATIONAL",
@@ -235,14 +310,14 @@
       "brand": "Speed Queen",
       "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCN030LC2",
       "id": 10,
-      "lastStatusChangeTimestamp": 1788788076661,
+      "lastStatusChangeTimestamp": 1789939648437,
       "laundromatId": 2,
       "model": "SCN030LC2",
       "nickname": "09 Speed Queen SCN030LC2",
-      "position": 8,
+      "position": 7,
       "serialNumber": "0908009011",
       "size": "30 lb",
-      "status": "OPERATIONAL",
+      "status": "DOWN",
       "type": "WASHER"
     },
     {
@@ -253,7 +328,7 @@
       "laundromatId": 2,
       "model": "T-600",
       "nickname": "10 Dexter T-600",
-      "position": 9,
+      "position": 8,
       "serialNumber": "W1.17098.039",
       "size": "40 lb",
       "status": "OPERATIONAL",
@@ -267,7 +342,7 @@
       "laundromatId": 2,
       "model": "SCN030LC2",
       "nickname": "11 Speed Queen SCN030LC2",
-      "position": 10,
+      "position": 9,
       "serialNumber": "0908007808",
       "size": "30 lb",
       "status": "OPERATIONAL",
@@ -281,7 +356,7 @@
       "laundromatId": 2,
       "model": "SCN030LC2",
       "nickname": "12 Speed Queen SCN030LC2",
-      "position": 11,
+      "position": 10,
       "serialNumber": "0908009027",
       "size": "30 lb",
       "status": "OPERATIONAL",
@@ -319,11 +394,11 @@
       "brand": "Speed Queen",
       "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCT040NC",
       "id": 17,
-      "lastStatusChangeTimestamp": 1788795212653,
+      "lastStatusChangeTimestamp": 1789144574914,
       "laundromatId": 2,
       "model": "SCT040NC",
       "nickname": "13 Speed Queen SCT040NC",
-      "position": 12,
+      "position": 11,
       "serialNumber": "1907048732",
       "size": "40 lb",
       "status": "OPERATIONAL",
@@ -337,7 +412,7 @@
       "laundromatId": 2,
       "model": "SCL030GC2",
       "nickname": "14 Speed Queen SCL030GC2",
-      "position": 13,
+      "position": 12,
       "serialNumber": "1201005092",
       "size": "30 lb",
       "status": "OPERATIONAL",
@@ -351,7 +426,7 @@
       "laundromatId": 2,
       "model": "T-400",
       "nickname": "15 Dexter T-400",
-      "position": 14,
+      "position": 13,
       "serialNumber": "W1.18037.054",
       "size": "30 lb",
       "status": "OPERATIONAL",
@@ -809,7 +884,7 @@
       "laundromatId": 2,
       "model": "T-400",
       "nickname": "16 Dexter T-400",
-      "position": 15,
+      "position": 14,
       "serialNumber": "W1.18032.019",
       "size": "30 lb",
       "status": "OPERATIONAL",
@@ -823,7 +898,7 @@
       "laundromatId": 2,
       "model": "HC40MD2",
       "nickname": "17 Huebsch HC40MD2",
-      "position": 16,
+      "position": 15,
       "serialNumber": "3050460926",
       "size": "40 lb",
       "status": "OPERATIONAL",
@@ -837,7 +912,7 @@
       "laundromatId": 2,
       "model": "SCL040GC2",
       "nickname": "18 Speed Queen SCL040GC2",
-      "position": 17,
+      "position": 16,
       "serialNumber": "1201005066",
       "size": "40 lb",
       "status": "OPERATIONAL",
@@ -851,7 +926,7 @@
       "laundromatId": 2,
       "model": "SCL030GC2",
       "nickname": "19 Speed Queen SCL030GC2",
-      "position": 18,
+      "position": 17,
       "serialNumber": "1201005091",
       "size": "30 lb",
       "status": "OPERATIONAL",
@@ -865,7 +940,7 @@
       "laundromatId": 2,
       "model": "HC40AC2",
       "nickname": "20 Huebsch HC40AC2",
-      "position": 19,
+      "position": 18,
       "serialNumber": "0512904576",
       "size": "40 lb",
       "status": "OPERATIONAL",
@@ -879,7 +954,7 @@
       "laundromatId": 2,
       "model": "SCT040NC",
       "nickname": "21 Speed Queen SCT040NC",
-      "position": 20,
+      "position": 19,
       "serialNumber": "2109037009",
       "size": "40 lb",
       "status": "OPERATIONAL",
@@ -893,7 +968,7 @@
       "laundromatId": 2,
       "model": "T-300",
       "nickname": "22 Dexter T-300",
-      "position": 21,
+      "position": 20,
       "serialNumber": "W1.24232.011",
       "size": "20 lb",
       "status": "OPERATIONAL",
@@ -907,7 +982,7 @@
       "laundromatId": 2,
       "model": "T-300",
       "nickname": "23 Dexter T-300",
-      "position": 22,
+      "position": 21,
       "serialNumber": "W1.24232.012",
       "size": "20 lb",
       "status": "OPERATIONAL",
@@ -921,7 +996,7 @@
       "laundromatId": 2,
       "model": "T-300",
       "nickname": "24 Dexter T-300",
-      "position": 23,
+      "position": 22,
       "serialNumber": "W1.24232.010",
       "size": "20 lb",
       "status": "OPERATIONAL",
@@ -935,7 +1010,7 @@
       "laundromatId": 2,
       "model": "T-300",
       "nickname": "25 Dexter T-300",
-      "position": 24,
+      "position": 23,
       "serialNumber": "W1.24232.017",
       "size": "20 lb",
       "status": "OPERATIONAL",
@@ -949,7 +1024,7 @@
       "laundromatId": 2,
       "model": "SCN020WCV",
       "nickname": "26 Speed Queen SCN020WCV",
-      "position": 25,
+      "position": 24,
       "serialNumber": "1711060887",
       "size": "20 lb",
       "status": "OPERATIONAL",
@@ -981,6 +1056,117 @@
       "serialNumber": "2370880K16",
       "size": "40 lb",
       "status": "DOWN",
+      "type": "WASHER"
+    },
+    {
+      "brand": "Speed Queen",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSCN020WCV",
+      "id": 67,
+      "lastStatusChangeTimestamp": 1789079642161,
+      "laundromatId": 2,
+      "model": "SCN020WCV",
+      "nickname": "27 Speed Queen SCN020WCV",
+      "position": 25,
+      "serialNumber": "1711060892",
+      "size": "20 lb",
+      "status": "OPERATIONAL",
+      "type": "WASHER"
+    },
+    {
+      "brand": "Speed Queen",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dHCN060KCV",
+      "id": 68,
+      "lastStatusChangeTimestamp": 1789079881801,
+      "laundromatId": 2,
+      "model": "HCN060KCV",
+      "nickname": "28 Speed Queen HCN060KCV",
+      "position": 26,
+      "serialNumber": "1712051139",
+      "size": "60 lb",
+      "status": "OPERATIONAL",
+      "type": "WASHER"
+    },
+    {
+      "brand": "Speed Queen",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dHCN060KCV",
+      "id": 69,
+      "lastStatusChangeTimestamp": 1789079936427,
+      "laundromatId": 2,
+      "model": "HCN060KCV",
+      "nickname": "29 Speed Queen HCN060KCV",
+      "position": 27,
+      "serialNumber": "1712051142",
+      "size": "60 lb",
+      "status": "OPERATIONAL",
+      "type": "WASHER"
+    },
+    {
+      "brand": "Huebsch",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dHC40BC2",
+      "id": 70,
+      "lastStatusChangeTimestamp": 1789080017274,
+      "laundromatId": 2,
+      "model": "HC40BC2",
+      "nickname": "30 Huebsch HC40BC2",
+      "position": 28,
+      "serialNumber": "3010451642",
+      "size": "40 lb",
+      "status": "OPERATIONAL",
+      "type": "WASHER"
+    },
+    {
+      "brand": "Huebsch",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dHC40BC2",
+      "id": 71,
+      "lastStatusChangeTimestamp": 1789080088010,
+      "laundromatId": 2,
+      "model": "HC40BC2",
+      "nickname": "31 Huebsch HC40BC2",
+      "position": 29,
+      "serialNumber": "3020454374",
+      "size": "40 lb",
+      "status": "OPERATIONAL",
+      "type": "WASHER"
+    },
+    {
+      "brand": "Huebsch",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dHC40BC2",
+      "id": 72,
+      "lastStatusChangeTimestamp": 1789080135639,
+      "laundromatId": 2,
+      "model": "HC40BC2",
+      "nickname": "32 Huebsch HC40BC2",
+      "position": 30,
+      "serialNumber": "3020453778",
+      "size": "40 lb",
+      "status": "OPERATIONAL",
+      "type": "WASHER"
+    },
+    {
+      "brand": "Huebsch",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dHC40BC2",
+      "id": 73,
+      "lastStatusChangeTimestamp": 1789080192315,
+      "laundromatId": 2,
+      "model": "HC40BC2",
+      "nickname": "33 Huebsch HC40BC2",
+      "position": 31,
+      "serialNumber": "3120349855",
+      "size": "40 lb",
+      "status": "OPERATIONAL",
+      "type": "WASHER"
+    },
+    {
+      "brand": "John Deere Generator",
+      "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003d4039+SERIES",
+      "id": 74,
+      "lastStatusChangeTimestamp": 1789744901475,
+      "laundromatId": 3,
+      "model": "4039 SERIES",
+      "position": 29,
+      "serialNumber": "CD4039B003023",
+      "size": "4000 lb",
+      "status": "OPERATIONAL",
       "type": "WASHER"
     }
   ],
@@ -1294,15 +1480,6 @@
       "taskName": "Door Seal Inspection"
     },
     {
-      "id": 35,
-      "isCompleted": false,
-      "isRecurring": true,
-      "machineId": 60,
-      "recurrenceIntervalDays": 30,
-      "scheduledTimestamp": 1789566772043,
-      "taskName": "Water Inlet Valve Check"
-    },
-    {
       "id": 36,
       "isCompleted": false,
       "isRecurring": true,
@@ -1364,6 +1541,15 @@
       "recurrenceIntervalDays": 90,
       "scheduledTimestamp": 1791554257590,
       "taskName": "Door Seal Inspection"
+    },
+    {
+      "id": 43,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 60,
+      "recurrenceIntervalDays": 30,
+      "scheduledTimestamp": 1792158772043,
+      "taskName": "Water Inlet Valve Check"
     }
   ],
   "spareParts": [
@@ -1386,7 +1572,8 @@
       "minimumThreshold": 1,
       "name": "fuse",
       "partNumber": "123",
-      "stockQuantity": 13
+      "stockQuantity": 49
     }
-  ]
+  ],
+  "teamPassword": "Fingers5494"
 }
