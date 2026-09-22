@@ -64,8 +64,8 @@
                     </div>
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Target Machine</label>
-                            <select x-model="dispatch.machineId" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold">
+                            <label id="labelDispatchMachine" class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Target Machine</label>
+                            <select aria-labelledby="labelDispatchMachine" x-model="dispatch.machineId" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold">
                                 <option value="">Select Unit...</option>
                                 <template x-for="m in data.machines" :key="m.id">
                                     <option :value="m.id" x-text="(m.nickname || m.model) + ' (' + getSiteName(m.laundromatId) + ')'"></option>
@@ -73,8 +73,8 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Task Details</label>
-                            <input type="text" x-model="dispatch.task" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold" placeholder="e.g. Check water leak">
+                            <label id="labelDispatchTask" class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Task Details</label>
+                            <input type="text" aria-labelledby="labelDispatchTask" x-model="dispatch.task" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold" placeholder="e.g. Check water leak">
                         </div>
                         <button @click="dispatchWorkOrder()" class="w-full bg-blue-600 text-white p-5 rounded-2xl font-black shadow-lg hover:bg-blue-700 transition active:scale-95">Dispatch to Team</button>
                     </div>
