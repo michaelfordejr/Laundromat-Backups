@@ -29,7 +29,8 @@ function getPortalApp() {
         },
 
         unlockAdmin(code) {
-            if (code === '5494') {
+            const targetCode = this.data.adminCode || '5494';
+            if (code === targetCode) {
                 this.isAdminUnlocked = true;
                 sessionStorage.setItem('admin_unlocked', 'true');
                 return true;
