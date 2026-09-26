@@ -226,6 +226,20 @@
       "machineId": 71,
       "notes": "the lock plunger was not retracting at the end of the wash cycle. The plunger was damaged. \n\n(Logged via: Forde33)",
       "timestamp": 1790189288821
+    },
+    {
+      "action": "Completed: Door Seal Inspection",
+      "id": 30,
+      "machineId": 60,
+      "notes": "Scheduled maintenance completed.\n\n(Logged via: Forde33)",
+      "timestamp": 1790195311006
+    },
+    {
+      "action": "Completed: test",
+      "id": 31,
+      "machineId": 17,
+      "notes": "Scheduled maintenance completed.\n\n(Logged via: Forde33)",
+      "timestamp": 1790195428765
     }
   ],
   "machines": [
@@ -803,7 +817,7 @@
       "brand": "Speed Queen",
       "documentationUrl": "https://alliancedoc.net/en-us/Home/Results?model\u003dSTT30N",
       "id": 46,
-      "lastStatusChangeTimestamp": 1788881608091,
+      "lastStatusChangeTimestamp": 1790420187751,
       "laundromatId": 2,
       "model": "STT30N",
       "nickname": "01 Speed Queen STT30N",
@@ -1507,15 +1521,6 @@
       "taskName": "Door Seal Inspection"
     },
     {
-      "id": 36,
-      "isCompleted": false,
-      "isRecurring": true,
-      "machineId": 60,
-      "recurrenceIntervalDays": 90,
-      "scheduledTimestamp": 1791553972043,
-      "taskName": "Door Seal Inspection"
-    },
-    {
       "id": 37,
       "isCompleted": false,
       "isRecurring": true,
@@ -1577,6 +1582,24 @@
       "recurrenceIntervalDays": 30,
       "scheduledTimestamp": 1792158772043,
       "taskName": "Water Inlet Valve Check"
+    },
+    {
+      "id": 44,
+      "isCompleted": false,
+      "isRecurring": true,
+      "machineId": 60,
+      "recurrenceIntervalDays": 90,
+      "scheduledTimestamp": 1799329972043,
+      "taskName": "Door Seal Inspection"
+    },
+    {
+      "id": 45,
+      "isCompleted": false,
+      "isRecurring": false,
+      "machineId": 60,
+      "recurrenceIntervalDays": 0,
+      "scheduledTimestamp": 1790265624629,
+      "taskName": "test"
     }
   ],
   "spareParts": [
